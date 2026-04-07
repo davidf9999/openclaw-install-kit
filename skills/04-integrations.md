@@ -82,9 +82,46 @@ To find your Telegram user ID: message @userinfobot in Telegram.
 
 ## WhatsApp (if selected — complex, do after Telegram)
 
-> ⚠️ **WhatsApp requires a public HTTPS endpoint (SSL + domain).** If `Domain: none` in your deployment brief, skip for now and return after setting up a domain and SSL.
->
-> WhatsApp also requires a **Meta Business account** with an approved app — the approval process can take 1–3 days.
+Check `deployment-brief.md` for which WhatsApp path was chosen during discovery. The two paths are completely different.
+
+---
+
+### Path A — Personal number (whatsapp-web.js bridge)
+
+Uses your existing WhatsApp account. No Meta approval needed. Requires a public HTTPS URL for the webhook — use Cloudflare Tunnel if you have no domain.
+
+> ⚠️ Less stable than the API path — may break on WhatsApp updates. Requires keeping a browser session alive. Fine for personal use.
+
+**Step 1 — Install Cloudflare Tunnel** (skip if you already have a domain + SSL):
+```bash
+curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -o /tmp/cloudflared.deb
+sudo dpkg -i /tmp/cloudflared.deb
+cloudflared tunnel --url http://localhost:18789
+```
+Note the `https://something.trycloudflare.com` URL — you'll need it below.
+
+**Step 2 — Configure OpenClaw WhatsApp bridge:**
+```bash
+openclaw config set whatsapp.mode bridge
+openclaw config set whatsapp.webhook_url https://<your-tunnel-or-domain>/webhooks/whatsapp
+systemctl --user restart openclaw-gateway
+```
+
+**Step 3 — Scan QR code:**
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
+openclaw whatsapp qr
+```
+Scan the QR code with your phone's WhatsApp (Linked Devices → Link a Device).
+
+**Step 4 — Verify:**
+Send yourself a WhatsApp message. Gordo should respond.
+
+---
+
+### Path B — Separate/business number (Meta Business API)
+
+> ⚠️ Requires a public HTTPS endpoint and Meta Business API approval (1–3 days).
 
 1. Go to developers.facebook.com → Create a new app → Add the WhatsApp product
 2. Get your **Phone Number ID** and **Permanent Access Token**

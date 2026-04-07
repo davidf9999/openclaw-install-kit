@@ -34,7 +34,10 @@ Ask the user the following questions. You do not need to ask them all at once �
 
 Which platforms should OpenClaw connect to? (select all that apply)
 - [ ] Telegram (simplest — start here if unsure)
-- [ ] WhatsApp ⚠️ *Requires Meta Business API approval (1–3 days) or a persistent browser bridge. Start with Telegram first if you want something working today.*
+- [ ] WhatsApp ⚠️ *Two very different setup paths — ask which one:*
+  - **Personal number** (your own WhatsApp): uses `whatsapp-web.js` browser bridge — no Meta approval needed, works today, but requires keeping a browser session alive and may break on WhatsApp updates
+  - **Separate/business number**: uses Meta Business API — stable and supported, but requires Meta app approval (1–3 days) and a public HTTPS endpoint
+  - Record which path was chosen in the brief — skill 04 handles them differently
 - [ ] Slack
 - [ ] Discord
 - [ ] Signal
