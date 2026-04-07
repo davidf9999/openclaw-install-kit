@@ -1,6 +1,6 @@
-# Personal files — kit-author use only, not for the public repo
-MY-INSTALL.md
-personal/
+# Personal files — kit-author use only, never committed to the public repo
+# Put MY-INSTALL.md, deployment-brief.md, runbook.md, notes, etc. here
+private/
 
 # Secrets — never commit these
 .env
@@ -9,12 +9,6 @@ credentials.json
 token.json
 *.pem
 *.key
-
-# Personal deployment artifacts
-deployment-brief.md
-runbook.md
-workflows.md
-system-prompt.md
 
 # OS
 .DS_Store
