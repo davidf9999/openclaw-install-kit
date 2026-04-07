@@ -56,12 +56,12 @@ If any secrets appear in bash history:
 history -c && history -w    # clear history
 ```
 
-Check no secrets are in the PM2 startup command:
+Check no secrets are in the systemd service environment:
 ```bash
-pm2 show openclaw | grep env
+sudo systemctl show openclaw | grep -i env
 ```
 
-Secrets should not appear in PM2 env output. If they do, move them to `.env` and update OpenClaw config to read from file.
+Secrets should not appear in the service environment. If they do, move them to `.env` and update OpenClaw config to read from file.
 
 ---
 
@@ -149,7 +149,7 @@ watch -n2 sensors
 If temps exceed 85°C under load, configure OpenClaw to limit concurrent agent tasks:
 ```bash
 openclaw config set gateway.max_concurrent_tasks 2
-pm2 restart openclaw
+sudo systemctl restart openclaw
 ```
 
 ---

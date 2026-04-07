@@ -52,14 +52,14 @@ sudo systemctl start openclaw
 ### Update OpenClaw
 ```bash
 npm update -g openclaw
-pm2 restart openclaw
+sudo systemctl restart openclaw
 openclaw --version
 ```
 
 ### Update skills
 ```bash
 clawdhub update --all
-pm2 restart openclaw
+sudo systemctl restart openclaw
 ```
 
 ---
@@ -121,7 +121,7 @@ Store this file off-machine (external drive, encrypted cloud storage).
 # On a fresh machine after completing skills 02 and 03:
 tar -xzf openclaw-backup-YYYYMMDD.tar.gz -C ~/
 chmod 600 ~/openclaw/.env ~/openclaw/credentials.json ~/openclaw/token.json 2>/dev/null
-pm2 restart openclaw
+sudo systemctl restart openclaw
 ```
 
 ---
@@ -163,7 +163,7 @@ pm2 restart openclaw
 
 Run through this checklist with the user present:
 
-- [ ] `pm2 status` shows `openclaw` as `online`
+- [ ] `sudo systemctl status openclaw` shows `active (running)`
 - [ ] Send a test message via primary messaging platform — response received
 - [ ] `sensors` baseline recorded and within acceptable range (fanless hardware)
 - [ ] `runbook.md` written and readable
