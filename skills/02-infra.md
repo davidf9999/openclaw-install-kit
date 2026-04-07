@@ -1,43 +1,49 @@
 # Skill 02 — Infrastructure
 
-**Purpose**: Prepare the Ubuntu machine to run OpenClaw — Node.js, process manager, SSL, thermal monitoring.
+**Purpose**: Prepare the Ubuntu machine to run OpenClaw — Node.js, thermal monitoring, firewall, and working directory.
 
 **Input**: `deployment-brief.md` (from skill 01)  
-**Output**: Verified ready machine — Node 24 installed, PM2 running, SSL in place (if domain available), `lm-sensors` installed if fanless
+**Output**: Verified ready machine — Node 24 installed, firewall active, `lm-sensors` installed if fanless, `~/openclaw` directory exists
+
+> **Phase 2 of 7 — Infrastructure**  
+> Re-read `deployment-brief.md` before starting. Adapt steps based on `Fanless`, `Domain`, and `Hosting` fields.  
+> You will run all commands yourself in your terminal. After each command block, paste the output back here so I can verify before we continue.  
+> If you are re-entering this phase, say "resuming Phase 2" and paste the output of `node --version` so I can see where we left off.
 
 ---
 
 ## Instructions
 
 Read `deployment-brief.md` before starting. Adapt steps based on:
-- `Fanless: yes` → install and configure `lm-sensors`
-- `Domain: none` → skip SSL/certbot; use Telegram long-poll mode instead of webhooks
+- `Fanless: yes` → install and configure `lm-sensors`, check idle temps before continuing
+- `Domain: none` → skip SSL/certbot entirely; Telegram long-poll mode does not need it
 - `Hosting: VPS` → add firewall rules early; bare metal may already have them
-
-Run all commands on the target machine (SSH in or use local terminal).
 
 ---
 
 ## Step 1 — System update
 
+Run this in your terminal and paste the output:
+
 ```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y curl git build-essential ufw lm-sensors
+sudo apt update && sudo apt upgrade -y && sudo apt install -y curl git build-essential ufw lm-sensors stress-ng
 ```
 
-If fanless hardware, run sensors-detect now:
+This updates your system and installs required tools including `lm-sensors` (temperature monitoring) and `stress-ng` (thermal load testing for Phase 5).
+
+**If fanless hardware**, also run:
+
 ```bash
-sudo sensors-detect --auto
-sensors  # verify temperature readings are visible
+sudo sensors-detect --auto && sensors
 ```
 
-Note current idle CPU temp. If already above 60°C at idle, flag to user before continuing.
+Paste the `sensors` output. I will check your idle CPU temperature before we continue. **If idle temp is above 60°C, stop and tell me — we need to address that before installing anything.**
 
 ---
 
 ## Step 2 — Node.js via nvm
 
-Do not use apt's Node.js package (usually outdated).
+Do not use the system apt Node.js package — it is usually outdated. Install via nvm:
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
@@ -45,23 +51,19 @@ source ~/.bashrc
 nvm install 24
 nvm use 24
 nvm alias default 24
-node --version   # must be v24.x.x
-npm --version
 ```
 
----
-
-## Step 3 — Install stress-ng (for thermal testing later)
+Then verify:
 
 ```bash
-sudo apt install -y stress-ng
+node --version && npm --version
 ```
 
-PM2 is not needed — OpenClaw registers itself as a systemd service via `openclaw onboard --install-daemon` (skill 03).
+Paste the output. I need to see `v24.x.x` before we continue.
 
 ---
 
-## Step 4 — Firewall baseline
+## Step 3 — Firewall baseline
 
 ```bash
 sudo ufw default deny incoming
@@ -73,46 +75,50 @@ sudo ufw enable
 sudo ufw status verbose
 ```
 
+Paste the `ufw status verbose` output.
+
 ---
 
-## Step 5 — SSL (only if domain is available)
+## Step 4 — SSL (skip if `Domain: none`)
 
-Skip this step if `deployment-brief.md` shows `Domain: none`. Telegram long-poll mode does not require SSL.
+**Skip this step** if `deployment-brief.md` shows `Domain: none`. Telegram long-poll mode does not require SSL or a public endpoint.
+
+If you do have a domain:
 
 ```bash
 sudo apt install -y certbot
 sudo certbot certonly --standalone -d <your-domain>
-# Note cert paths:
-# /etc/letsencrypt/live/<your-domain>/fullchain.pem
-# /etc/letsencrypt/live/<your-domain>/privkey.pem
-```
-
-Set up auto-renewal:
-```bash
 sudo systemctl enable certbot.timer
 sudo systemctl start certbot.timer
-sudo certbot renew --dry-run  # verify renewal works
+sudo certbot renew --dry-run
 ```
+
+Paste the `certbot renew --dry-run` output to confirm auto-renewal works.
 
 ---
 
-## Step 6 — Directory structure
+## Step 5 — Working directory
 
 ```bash
-mkdir -p ~/openclaw
-cd ~/openclaw
+mkdir -p ~/openclaw && ls -la ~/openclaw
 ```
 
-This will be the OpenClaw working directory for the rest of the kit.
+Paste the output to confirm the directory exists.
 
 ---
 
 ## Completion check
 
-Before marking this phase done:
-- [ ] `node --version` returns v24.x.x
-- [ ] `pm2 --version` returns a version
-- [ ] `sudo ufw status` shows active with SSH + 80 + 443 open
-- [ ] If fanless: `sensors` returns temperature readings
-- [ ] If domain available: `sudo certbot renew --dry-run` succeeds
-- [ ] `~/openclaw` directory exists
+Before marking this phase done, paste the output of each:
+
+- [ ] `node --version` → must show `v24.x.x`
+- [ ] `sudo ufw status` → must show active with SSH + 80 + 443 open
+- [ ] If fanless: `sensors` → temperature readings visible, idle temp below 60°C
+- [ ] If domain: `sudo certbot renew --dry-run` → succeeds
+- [ ] `ls ~/openclaw` → directory exists (may be empty)
+
+---
+
+**Phase 2 complete.**
+
+Once all checks pass, say: *"Infrastructure is ready. Type `continue` when you're ready to start Phase 3 — OpenClaw Core Install."*

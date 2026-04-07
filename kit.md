@@ -23,6 +23,7 @@ tools:
   - write
   - edit
 skills:
+  - skills/00-orientation.md
   - skills/01-discovery.md
   - skills/02-infra.md
   - skills/03-openclaw-core.md
@@ -58,15 +59,20 @@ environment:
   platforms:
     - claude-code
   adaptationNotes: >
-    Primary target is claude-code running against an Ubuntu machine (local or SSH).
-    Post-install phases 06 and 07 are also usable from within a running OpenClaw instance
-    (target=openclaw). Tested on Ubuntu 22.04+ on both bare metal and VPS.
+    Designed for Journey AI's conversational runtime: the agent guides the user step by step,
+    the user runs all commands manually and pastes output back for verification.
+    The agent cannot execute commands directly — this is by design.
+    Also compatible with Claude Code (tool-executing mode) for local installs.
+    Tested on Ubuntu 22.04+ and 24.04 on bare metal and VPS.
     Fanless/low-power hardware (e.g. Intel Core M) is supported with thermal monitoring notes.
 selfContained: true
 fileManifest:
   - path: kit.md
     role: primary
     description: Master workflow guide and kit metadata
+  - path: skills/00-orientation.md
+    role: skill
+    description: Orientation — delivered before Phase 1; sets expectations for the collaboration model
   - path: skills/01-discovery.md
     role: skill
     description: Interview phase — produces deployment-brief.md
@@ -131,8 +137,9 @@ At the end of each phase, confirm the output artifact exists before moving on.
 
 ## Steps
 
+0. **Orientation** (`skills/00-orientation.md`) — Brief the user before Phase 1 begins
 1. **Discovery** (`skills/01-discovery.md`) — Interview the user, produce `deployment-brief.md`
-2. **Infrastructure** (`skills/02-infra.md`) — Prepare the Ubuntu machine: Node.js, SSL, process manager
+2. **Infrastructure** (`skills/02-infra.md`) — Prepare the Ubuntu machine: Node.js, firewall, thermal monitoring
 3. **OpenClaw Core** (`skills/03-openclaw-core.md`) — Install OpenClaw, configure gateway, verify daemon
 4. **Integrations** (`skills/04-integrations.md`) — Connect messaging platforms, calendar, email, CRM
 5. **Security** (`skills/05-security.md`) — Firewall, credential hardening, access control audit

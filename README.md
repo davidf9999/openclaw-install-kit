@@ -2,7 +2,7 @@
 
 A [Journey kit](https://www.journeykits.ai) for installing, integrating, hardening, and handing off a self-hosted [OpenClaw](https://openclaw.ai) instance on Ubuntu — using cloud LLM APIs (no local GPU required).
 
-Run from Claude Code. Seven guided phases. Produces a written runbook at the end.
+Eight guided phases (including orientation). The agent guides you step by step — you run commands in your terminal, paste the output back, and the agent verifies before moving on. Produces a written runbook at the end.
 
 ---
 
@@ -28,10 +28,11 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 
 | # | Skill | What happens |
 |---|---|---|
+| 0 | `skills/00-orientation.md` | Brief the user — what they'll get, how it works |
 | 1 | `skills/01-discovery.md` | Interview → `deployment-brief.md` |
 | 2 | `skills/02-infra.md` | Node 24, ufw firewall, SSL, thermal monitoring |
 | 3 | `skills/03-openclaw-core.md` | Install + systemd daemon + health check |
-| 4 | `skills/04-integrations.md` | Telegram, WhatsApp, Slack, Email, Google, CRM |
+| 4 | `skills/04-integrations.md` | Telegram, WhatsApp, Slack, Email, Google, GitHub, local disk |
 | 5 | `skills/05-security.md` | Firewall audit, credential hygiene, fail2ban, SSH |
 | 6 | `skills/06-optimize.md` | System prompt, skill selection, workflow scheduling |
 | 7 | `skills/07-handoff.md` | `runbook.md` generation, backup, final checklist |
@@ -43,7 +44,6 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 - Ubuntu 20.04+ (22.04+ recommended)
 - Terminal or SSH access to the target machine
 - An API key from a supported LLM provider (Anthropic recommended)
-- Claude Code on your local machine (to run the kit)
 - A domain name is optional — Telegram works in long-poll mode without one
 
 ---
@@ -64,10 +64,6 @@ git clone https://github.com/davidf9999/openclaw-install-kit
 cd openclaw-install-kit
 # Open kit.md and follow the phases in order
 ```
-
-### Personal install guide
-
-If you are the kit author testing on a specific machine, see [`MY-INSTALL.md`](MY-INSTALL.md) — a pre-filled guide for the ASUS UX305F / Ubuntu setup.
 
 ---
 

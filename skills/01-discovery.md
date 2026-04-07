@@ -5,6 +5,10 @@
 **Input**: Conversation with user  
 **Output**: `deployment-brief.md` in the working directory
 
+> **Phase 1 of 7 — Discovery**  
+> This phase is entirely conversational — no terminal commands. Ask questions, collect answers, write the brief.  
+> If you are re-entering this phase, ask the user to confirm whether `deployment-brief.md` already exists before asking questions again.
+
 ---
 
 ## Instructions
@@ -16,7 +20,7 @@ Ask the user the following questions. You do not need to ask them all at once �
 - What machine will OpenClaw run on?
   - Bare metal (what model/specs)?
   - VPS (which provider — DigitalOcean, Hetzner, AWS, other)?
-- What OS version is installed? (`lsb_release -a`)
+- What OS version is installed? (Ask them to run `lsb_release -a` and paste the output)
 - Is this machine fanless or passively cooled? (Important for thermal monitoring)
 - Is this intended for personal/dev use or always-on production?
 - Do you have a domain name or DDNS hostname for this machine?
@@ -30,7 +34,7 @@ Ask the user the following questions. You do not need to ask them all at once �
 
 Which platforms should OpenClaw connect to? (select all that apply)
 - [ ] Telegram (simplest — start here if unsure)
-- [ ] WhatsApp
+- [ ] WhatsApp ⚠️ *Requires Meta Business API approval (1–3 days) or a persistent browser bridge. Start with Telegram first if you want something working today.*
 - [ ] Slack
 - [ ] Discord
 - [ ] Signal
@@ -41,8 +45,10 @@ For each selected platform, note whether a bot/app account already exists.
 
 ### 4. Integrations
 
-- Google Workspace (Calendar, Gmail, Drive)? (Most complex — only include if needed)
+- Google Workspace (Calendar, Gmail, Drive)? (Most complex — only include if needed. Ask which services specifically.)
 - CRM? (Which one — HubSpot, Salesforce, Notion, Airtable, other?)
+- GitHub? (API access to repos, issues, PRs)
+- Local disk access? (Scope to home directory only — confirm boundary)
 - Any other webhooks or custom integrations?
 
 ### 5. Use cases
@@ -84,6 +90,8 @@ Generated: <date>
 
 ## Integrations
 - Google Workspace: <yes/no — which services>
+- GitHub: <yes/no>
+- Local disk: <yes/no — scope>
 - CRM: <name or none>
 - Other: <list>
 
@@ -106,3 +114,9 @@ Before marking this phase done:
 - [ ] `deployment-brief.md` exists in the working directory
 - [ ] All 6 sections are filled in (no blanks — use "none" or "TBD" explicitly)
 - [ ] User has confirmed the brief is accurate
+
+---
+
+**Phase 1 complete.**
+
+Once the user confirms the brief is accurate, say: *"Phase 1 done — deployment-brief.md is your source of truth for the rest of the install. Type `continue` when you're ready to start Phase 2 — Infrastructure."*

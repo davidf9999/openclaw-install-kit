@@ -5,24 +5,29 @@
 **Input**: Completed installation (skills 01–06), `deployment-brief.md`  
 **Output**: `~/openclaw/runbook.md`, final verification, summary of what was installed
 
+> **Phase 7 of 7 — Handoff**  
+> Re-read `deployment-brief.md` and review what was installed across phases 02–06 before generating the runbook.  
+> This phase is mostly written output — minimal commands. Paste any command output back here.  
+> If you are re-entering this phase, say "resuming Phase 7."
+
 ---
 
 ## Instructions
 
-Generate `runbook.md` by filling in the template below using information gathered throughout the install. Then run the final verification checklist.
+Generate `runbook.md` by filling in the template below using information gathered throughout the install. Then run the final verification checklist with the user.
 
 ---
 
 ## Generate runbook.md
 
-Write this file to `~/openclaw/runbook.md`:
+Write this file to `~/openclaw/runbook.md`. Fill in all `<placeholders>` from the actual install:
 
 ```markdown
 # OpenClaw Runbook
 
 Generated: <date>
 Machine: <from deployment-brief>
-OpenClaw version: <openclaw --version>
+OpenClaw version: <from `openclaw --version`>
 
 ---
 
@@ -131,18 +136,21 @@ sudo systemctl restart openclaw
 | Symptom | First check |
 |---|---|
 | Bot not responding | `sudo systemctl status openclaw` — is it active? |
-| Auth errors in logs | API key expired? Check `journalctl -u openclaw -n 50` |
+| Auth errors in logs | API key expired? Check `sudo journalctl -u openclaw -n 50` |
 | High CPU/temp | `sensors`, reduce `max_concurrent_tasks` |
 | Google integration fails | `token.json` may be expired — re-run `openclaw auth google` |
-| Telegram webhook not working | SSL cert valid? `curl https://<domain>/health` |
+| Telegram not responding | Check `sudo journalctl -u openclaw -n 30` for auth errors |
+| Webhook not receiving | SSL cert valid? Domain pointing to this machine? |
 
 ---
+
+## Installed integrations
+
+<list each integration verified in skill 04>
 
 ## Installed skills
 
 <list each skill installed in skill 06>
-
----
 
 ## Scheduled workflows
 
@@ -161,22 +169,22 @@ sudo systemctl restart openclaw
 
 ## Final verification
 
-Run through this checklist with the user present:
+Run through this checklist. For each item, paste the output or confirm verbally:
 
 - [ ] `sudo systemctl status openclaw` shows `active (running)`
 - [ ] Send a test message via primary messaging platform — response received
-- [ ] `sensors` baseline recorded and within acceptable range (fanless hardware)
-- [ ] `runbook.md` written and readable
+- [ ] `sensors` baseline within acceptable range (fanless hardware)
+- [ ] `~/openclaw/runbook.md` written and readable — paste `ls -la ~/openclaw/`
 - [ ] Backup created and stored off-machine
-- [ ] User knows how to restart the daemon
-- [ ] User knows how to check logs
-- [ ] User knows how to update OpenClaw
+- [ ] User can describe how to restart the daemon
+- [ ] User can describe how to check logs
+- [ ] User can describe how to update OpenClaw
 
 ---
 
 ## Congratulations
 
-OpenClaw is installed, integrated, hardened, and documented. 
+OpenClaw is installed, integrated, hardened, and documented.
 
 **Natural next step**: Install `keylimeaistudios/ai-employee-starter` from the Journey registry to turn your OpenClaw agent into a structured AI employee with morning briefings, health monitoring, and daily reporting.
 
@@ -184,3 +192,9 @@ OpenClaw is installed, integrated, hardened, and documented.
 # From within OpenClaw or Claude Code:
 # journey install keylimeaistudios/ai-employee-starter --target openclaw
 ```
+
+---
+
+**Phase 7 complete. Installation complete.**
+
+The kit is done. Everything is documented in `~/openclaw/runbook.md`. Reach out to the OpenClaw community if you hit issues in day-to-day use.

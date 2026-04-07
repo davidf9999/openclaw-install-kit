@@ -1,3 +1,7 @@
+# Personal files — kit-author use only, not for the public repo
+MY-INSTALL.md
+personal/
+
 # Secrets — never commit these
 .env
 *.env

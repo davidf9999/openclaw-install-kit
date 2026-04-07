@@ -5,11 +5,16 @@
 **Input**: Running OpenClaw with integrations (from skill 04)  
 **Output**: Completed security checklist, all findings resolved or explicitly accepted
 
+> **Phase 5 of 7 — Security Hardening**  
+> Re-read `deployment-brief.md` before starting. Adapt steps based on whether the machine is internet-facing.  
+> Run each command, paste the output, and I will tell you what to fix before we continue.  
+> If you are re-entering this phase, say "resuming Phase 5."
+
 ---
 
 ## Instructions
 
-Work through each section. For each finding, either fix it or document why it is acceptable (note in the checklist). Do not skip sections.
+Work through each section. For each finding, either fix it or document why it is acceptable. Do not skip sections.
 
 ---
 
@@ -19,15 +24,15 @@ Work through each section. For each finding, either fix it or document why it is
 sudo ufw status verbose
 ```
 
-Verify only necessary ports are open:
-- SSH (22 or custom port)
-- 80/tcp (for certbot renewal challenge)
-- 443/tcp (if using webhooks)
-- OpenClaw gateway port (if exposing externally — evaluate if this is necessary)
+Paste the output. Verify only necessary ports are open:
+- SSH (22 or your custom port)
+- 80/tcp (certbot renewal challenge, only if you have a domain)
+- 443/tcp (webhooks, only if you have a domain)
+- OpenClaw gateway port — evaluate whether it needs to be exposed externally at all
 
-Close anything else:
+Close anything unexpected:
 ```bash
-sudo ufw deny <port>    # close any unexpected open ports
+sudo ufw deny <port>
 ```
 
 If SSH is on default port 22 and the machine is internet-facing, consider changing it:
@@ -38,22 +43,29 @@ sudo ufw delete allow ssh
 sudo systemctl restart sshd
 ```
 
+**Warning**: Open a second SSH session to verify the new port works before closing your current one.
+
 ---
 
 ## Step 2 — Credential audit
 
 ```bash
-# Check .env permissions
 stat ~/openclaw/.env
-# Expected: mode 600, owned by your user
+```
 
-# Check for keys in shell history
+Paste the output. Expected: mode `600`, owned by your user. If not `600`:
+```bash
+chmod 600 ~/openclaw/.env
+```
+
+Check for secrets in shell history:
+```bash
 grep -i 'api.key\|token\|secret\|password' ~/.bash_history | head -20
 ```
 
-If any secrets appear in bash history:
+Paste the output. If any secrets appear, clear history:
 ```bash
-history -c && history -w    # clear history
+history -c && history -w
 ```
 
 Check no secrets are in the systemd service environment:
@@ -61,28 +73,27 @@ Check no secrets are in the systemd service environment:
 sudo systemctl show openclaw | grep -i env
 ```
 
-Secrets should not appear in the service environment. If they do, move them to `.env` and update OpenClaw config to read from file.
+Paste the output. Secrets should not appear here. If they do, move them to `.env` and update OpenClaw config to read from file.
 
 ---
 
 ## Step 3 — File permissions
 
 ```bash
-# Core files should not be world-readable
 chmod 600 ~/openclaw/.env
 chmod 600 ~/openclaw/credentials.json 2>/dev/null || true
 chmod 600 ~/openclaw/token.json 2>/dev/null || true
 chmod 700 ~/openclaw
-
-# Verify
 ls -la ~/openclaw/
 ```
+
+Paste the `ls -la` output.
 
 ---
 
 ## Step 4 — Fail2ban (internet-facing machines only)
 
-Skip if machine is on a local network only.
+Skip this step if the machine is on a local network only (not reachable from the internet).
 
 ```bash
 sudo apt install -y fail2ban
@@ -91,9 +102,13 @@ sudo systemctl start fail2ban
 sudo fail2ban-client status sshd
 ```
 
+Paste the `fail2ban-client status sshd` output.
+
 ---
 
 ## Step 5 — SSH hardening (internet-facing machines only)
+
+Skip if local network only.
 
 ```bash
 sudo nano /etc/ssh/sshd_config
@@ -102,7 +117,7 @@ sudo nano /etc/ssh/sshd_config
 Ensure these are set:
 ```
 PermitRootLogin no
-PasswordAuthentication no    # only if you have SSH key auth set up
+PasswordAuthentication no    # only set this if you have confirmed SSH key auth works
 PubkeyAuthentication yes
 MaxAuthTries 3
 ```
@@ -117,52 +132,66 @@ sudo systemctl restart sshd
 
 ## Step 6 — Webhook endpoint review (if applicable)
 
-If any integrations use public webhook endpoints:
+Skip if `Domain: none` in deployment-brief.md.
 
 ```bash
-# List any ports OpenClaw is listening on externally
 ss -tlnp | grep openclaw
 ```
 
-Verify each exposed endpoint:
+Paste the output. For each exposed endpoint, verify:
 - Requires a secret/verify token (not open to the public)
 - Is behind SSL (HTTPS only)
-- Has rate limiting configured (check OpenClaw gateway settings)
+- Rate limiting is configured in OpenClaw gateway settings
 
 ---
 
-## Step 7 — Thermal check (fanless hardware)
+## Step 7 — Thermal check (fanless hardware only)
 
-If `Fanless: yes` in deployment-brief.md:
+Skip if `Fanless: no` in deployment-brief.md.
 
 ```bash
 sensors
 ```
 
-Record baseline temperature under load:
+Paste the output. Then run a short load test:
+
 ```bash
-# Run a short load test
-stress-ng --cpu 2 --timeout 30s &
-watch -n2 sensors
+stress-ng --cpu 2 --timeout 30s
 ```
 
-If temps exceed 85°C under load, configure OpenClaw to limit concurrent agent tasks:
+While it runs (or immediately after), paste:
+```bash
+sensors
+```
+
+If temps exceeded 85°C under load, configure OpenClaw to limit concurrent tasks:
 ```bash
 openclaw config set gateway.max_concurrent_tasks 2
 sudo systemctl restart openclaw
 ```
 
+Record the peak temperature observed.
+
 ---
 
 ## Completion checklist
 
-- [ ] Firewall: only necessary ports open
-- [ ] `.env` permissions: 600
-- [ ] No secrets in bash history or PM2 env
+Confirm each item and paste any outstanding command output:
+
+- [ ] Firewall: only necessary ports open — paste `sudo ufw status verbose`
+- [ ] `.env` permissions: 600 — paste `stat ~/openclaw/.env`
+- [ ] No secrets in bash history — paste grep output
+- [ ] No secrets in systemd env — paste `sudo systemctl show openclaw | grep -i env`
 - [ ] `credentials.json` / `token.json` permissions: 600 (if applicable)
 - [ ] Fail2ban active (internet-facing only)
 - [ ] SSH hardened (internet-facing only)
-- [ ] Webhook endpoints require verify tokens
+- [ ] Webhook endpoints require verify tokens (if applicable)
 - [ ] Thermal baseline recorded (fanless hardware only)
 
-Document any accepted risks with a brief rationale.
+Document any accepted risks with a brief rationale before continuing.
+
+---
+
+**Phase 5 complete.**
+
+Once all checklist items are confirmed or explicitly accepted, say: *"Security hardening done. Type `continue` when you're ready to start Phase 6 — Optimization."*
