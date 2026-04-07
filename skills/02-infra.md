@@ -47,19 +47,30 @@ Do not use the system apt Node.js package — it is usually outdated. Install vi
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
-source ~/.bashrc
-nvm install 24
-nvm use 24
-nvm alias default 24
 ```
 
-Then verify:
+Then load nvm and install Node 24 — **run this as a single block**:
+
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh" && nvm install 24 && nvm use --delete-prefix v24 && nvm alias default 24
+```
+
+> Note: if you have an existing npm global prefix in `~/.npmrc`, nvm will warn about it. The `--delete-prefix` flag clears that conflict automatically.
+
+Verify:
 
 ```bash
 node --version && npm --version
 ```
 
 Paste the output. I need to see `v24.x.x` before we continue.
+
+**Important**: In any new terminal session, openclaw requires nvm to be loaded first:
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
+```
+
+This is needed because nvm-installed binaries are not on the system PATH by default.
 
 ---
 

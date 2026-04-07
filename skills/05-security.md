@@ -49,13 +49,16 @@ sudo systemctl restart sshd
 
 ## Step 2 — Credential audit
 
+OpenClaw stores config (including API keys and tokens) in `~/.openclaw/openclaw.json`, not a `.env` file.
+
 ```bash
-stat ~/openclaw/.env
+stat ~/.openclaw/openclaw.json
 ```
 
 Paste the output. Expected: mode `600`, owned by your user. If not `600`:
 ```bash
-chmod 600 ~/openclaw/.env
+chmod 600 ~/.openclaw/openclaw.json
+chmod 700 ~/.openclaw
 ```
 
 Check for secrets in shell history:

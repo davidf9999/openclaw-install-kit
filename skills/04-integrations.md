@@ -14,86 +14,112 @@
 
 ## Instructions
 
-Only set up platforms listed under `Messaging Platforms` and `Integrations` in `deployment-brief.md`. Skip all other sections.
+Load nvm before running any openclaw commands:
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
+```
+
+Only set up platforms listed in `deployment-brief.md`. Skip all other sections.
 
 Always start with Telegram (simplest, no SSL required in long-poll mode). Add others only after Telegram is verified working.
 
 After every `openclaw config set` block, restart the daemon:
 ```bash
-sudo systemctl restart openclaw
+systemctl --user restart openclaw-gateway
 ```
 
 ---
 
 ## Telegram (start here)
 
-### Create bot
-1. Open Telegram on your phone or desktop
-2. Search for `@BotFather`
-3. Send `/newbot` — follow the prompts, choose a name and username
-4. BotFather will give you a **Bot Token** (looks like `123456789:ABCdef...`)
-5. Optionally send `/setprivacy` to BotFather → select your bot → choose `Disable` (allows reading group messages)
+Telegram is configured during onboard (skill 03). If you completed QuickStart onboard with a Telegram token, skip to **Verify** below.
 
-Tell me when you have your Bot Token (don't paste the token itself — just confirm you have it).
+### If Telegram was not set up during onboard
 
-### Configure in OpenClaw
+1. Open Telegram → search `@BotFather` → send `/newbot`
+2. Follow prompts → get your **Bot Token**
+   - ⚠️ Copy the token text directly from the BotFather chat — do NOT use the copy button
+   - ⚠️ Paste ONLY the token (e.g. `123456789:ABCdef...`) — not the bot username
 
 ```bash
-openclaw config set telegram.token <paste-token-here>
-openclaw config set telegram.mode longpoll
-sudo systemctl restart openclaw
+openclaw config set channels.telegram.botToken <paste-token-here>
+systemctl --user restart openclaw-gateway
 ```
 
-Replace `<paste-token-here>` with your actual token. After running, paste the output.
+### Verify Telegram is connected
 
-### Verify
-
-Open Telegram and send `/start` to your new bot. It should respond within a few seconds.
-
-Tell me what the bot replied (or if it didn't respond, paste the last 30 lines of logs):
+Check channel status:
 ```bash
-sudo journalctl -u openclaw -n 30 --no-pager
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
+openclaw status --deep 2>&1 | grep -A1 Telegram
 ```
+
+Paste the output. Look for `Telegram │ OK` in the deep probe section. If you see `401 Unauthorized`, the token is wrong — go to @BotFather → `/mybots` → your bot → **API Token** → **Revoke current token** → get a new one and re-run `openclaw config set`.
+
+### Pair with the bot
+
+Send any message to your bot in Telegram. It will respond with a **pairing request**. Approve it:
+
+```bash
+openclaw pairing approve telegram <code-shown-in-bot-message>
+```
+
+After pairing, the bot will respond to your messages. Send "hello" to confirm.
+
+### Lock down DM access (recommended)
+
+By default, any Telegram user who finds your bot can send pairing requests. Restrict it to yourself:
+
+```bash
+openclaw config set channels.telegram.dmPolicy allowlist
+openclaw config set channels.telegram.allowFrom '["YOUR_TELEGRAM_USER_ID"]'
+systemctl --user restart openclaw-gateway
+```
+
+To find your Telegram user ID: message @userinfobot in Telegram.
 
 ---
 
 ## WhatsApp (if selected — complex, do after Telegram)
 
-> ⚠️ **WhatsApp requires a public HTTPS endpoint (SSL + domain).** If `Domain: none` in your deployment brief, this integration cannot be completed until a domain and SSL are in place. Skip for now and return later.
+> ⚠️ **WhatsApp requires a public HTTPS endpoint (SSL + domain).** If `Domain: none` in your deployment brief, skip for now and return after setting up a domain and SSL.
 >
 > WhatsApp also requires a **Meta Business account** with an approved app — the approval process can take 1–3 days.
 
 1. Go to developers.facebook.com → Create a new app → Add the WhatsApp product
-2. Get your **Phone Number ID** and **Permanent Access Token** from the app dashboard
+2. Get your **Phone Number ID** and **Permanent Access Token**
 3. Set a webhook URL: `https://<your-domain>/webhooks/whatsapp`
 
 ```bash
 openclaw config set whatsapp.phone_number_id <id>
 openclaw config set whatsapp.access_token <token>
 openclaw config set whatsapp.webhook_verify_token <random-string-you-choose>
-sudo systemctl restart openclaw
+systemctl --user restart openclaw-gateway
 ```
 
 Register the webhook in the Meta dashboard using the verify token you chose.
 
-Paste the output of `sudo journalctl -u openclaw -n 30 --no-pager` after restarting.
+Check logs after restarting:
+```bash
+cat /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log | tail -30
+```
 
 ---
 
 ## Slack (if selected)
 
-1. Go to api.slack.com/apps → Create New App → choose **From scratch**
-2. Enable **Socket Mode** (avoids the need for a public URL)
-3. Add OAuth scopes under **OAuth & Permissions**: `chat:write`, `im:history`, `im:read`
+1. Go to api.slack.com/apps → Create New App → **From scratch**
+2. Enable **Socket Mode** (avoids need for a public URL)
+3. Add OAuth scopes: `chat:write`, `im:history`, `im:read`
 4. Install to workspace → get **Bot Token** (`xoxb-...`) and **App-Level Token** (`xapp-...`)
 
 ```bash
 openclaw config set slack.bot_token <xoxb-...>
 openclaw config set slack.app_token <xapp-...>
-sudo systemctl restart openclaw
+systemctl --user restart openclaw-gateway
 ```
 
-Send a DM to your bot in Slack to verify. Tell me what it replied.
+Send a DM to your bot in Slack to verify.
 
 ---
 
@@ -108,81 +134,67 @@ openclaw config set email.smtp_host <host>
 openclaw config set email.smtp_port 587
 openclaw config set email.username <your-address>
 openclaw config set email.password <app-password>
-sudo systemctl restart openclaw
+systemctl --user restart openclaw-gateway
 ```
-
-Paste the output after restarting.
 
 ---
 
 ## Google Workspace — Calendar and Contacts (if selected)
 
-**Only proceed if listed in `deployment-brief.md`. Enable only the specific APIs selected — do not enable Gmail or Drive unless the brief says so.**
+**Only proceed if listed in `deployment-brief.md`. Enable only the specific APIs selected.**
 
 1. Go to console.cloud.google.com → Create a new project
 2. Enable APIs: **Google Calendar API**, **People API** (for Contacts) — only these unless brief says otherwise
 3. Create **OAuth 2.0 credentials** → Application type: Desktop app
-4. Download `credentials.json` → place in `~/openclaw/`
+4. Download `credentials.json` → place in `~/.openclaw/`
 
 ```bash
-chmod 600 ~/openclaw/credentials.json
+chmod 600 ~/.openclaw/credentials.json
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
 openclaw auth google
 ```
 
-A browser window will open. Authorize the requested scopes. A `token.json` will be saved.
+A browser window will open. Authorize the requested scopes. A `token.json` will be saved to `~/.openclaw/`.
 
 ```bash
-chmod 600 ~/openclaw/token.json
-sudo systemctl restart openclaw
+chmod 600 ~/.openclaw/token.json
+systemctl --user restart openclaw-gateway
 ```
 
-Paste the output of the restart. Then test with:
-```bash
-openclaw query "what's on my calendar today?"
-```
+Test via the dashboard or Telegram:
+> "What's on my calendar today?"
 
-Paste the response.
-
-**Common failure**: If calendar or contacts access fails later, return to GCP console, verify the correct APIs are enabled, delete `token.json`, and re-run `openclaw auth google`.
+**Common failure**: If calendar access fails, return to GCP console, verify the APIs are enabled, delete `~/.openclaw/token.json`, and re-run `openclaw auth google`.
 
 ---
 
 ## GitHub (if selected)
 
 1. Go to github.com → Settings → Developer settings → Personal access tokens → Tokens (classic)
-2. Generate a new token with scopes: `repo`, `read:user`, `read:org` (adjust to your needs)
-3. Copy the token
+2. Generate a token with scopes: `repo`, `read:user`, `read:org`
 
 ```bash
 openclaw config set github.token <your-token>
-sudo systemctl restart openclaw
+systemctl --user restart openclaw-gateway
 ```
 
-Test:
-```bash
-openclaw query "list my open GitHub pull requests"
-```
-
-Paste the response.
+Test via Telegram or dashboard:
+> "List my open GitHub pull requests"
 
 ---
 
 ## Local disk access (if selected)
 
-OpenClaw can read and write files on the local machine. Scope must be restricted to the home directory.
-
 ```bash
 openclaw config set filesystem.allowed_paths "~"
 openclaw config set filesystem.enabled true
-sudo systemctl restart openclaw
+systemctl --user restart openclaw-gateway
 ```
 
-Test:
-```bash
-openclaw query "list files in my home directory"
-```
+Test via Telegram or dashboard:
+> "List files in my home directory"
 
-Paste the response. Verify it shows your home directory contents and does not access paths outside `~`.
+Verify it stays within `~` and does not access paths outside.
 
 ---
 
@@ -190,18 +202,18 @@ Paste the response. Verify it shows your home directory contents and does not ac
 
 For each platform in `deployment-brief.md`, confirm:
 
-- [ ] Telegram: bot responds to `/start`
+- [ ] Telegram: `openclaw status --deep` shows `Telegram │ OK`, bot responds, pairing approved
 - [ ] WhatsApp: webhook verified in Meta dashboard, test message received (skip if no domain)
 - [ ] Slack: bot responds to DM
 - [ ] Email: OpenClaw can read and send a test message
-- [ ] Google Calendar: calendar event readable via OpenClaw query
+- [ ] Google Calendar: calendar query returns results
 - [ ] Google Contacts: contact lookup works
 - [ ] GitHub: PR/repo query returns expected results
 - [ ] Local disk: file listing works, scoped to `~`
 
-Run this and paste the output — confirm no auth errors:
+Check logs for auth errors:
 ```bash
-sudo journalctl -u openclaw -n 50 --no-pager
+cat /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log | grep -i "error\|auth\|401" | tail -20
 ```
 
 ---

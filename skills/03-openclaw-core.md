@@ -3,19 +3,31 @@
 **Purpose**: Install OpenClaw, configure the gateway with API keys, register as a systemd daemon, and verify it responds.
 
 **Input**: `deployment-brief.md`, verified infra from skill 02  
-**Output**: Running OpenClaw systemd service, verified responsive, `~/openclaw/.env` in place
+**Output**: Running OpenClaw user systemd service, verified responsive, dashboard accessible
 
 > **Phase 3 of 7 — OpenClaw Core Install**  
-> Re-read `deployment-brief.md` before starting. All commands run in your terminal inside `~/openclaw`.  
-> Paste each output back here so I can verify before moving to the next step.  
-> If you are re-entering this phase, say "resuming Phase 3" and paste `sudo systemctl status openclaw`.
+> Re-read `deployment-brief.md` before starting.  
+> You will run all commands yourself in your terminal. Paste each output back here so I can verify before moving to the next step.  
+> If you are re-entering this phase, say "resuming Phase 3" and paste `systemctl --user status openclaw-gateway`.
+
+---
+
+## Important: load nvm before every openclaw command
+
+OpenClaw is installed via nvm's Node 24. In any new terminal session, run this first:
+
+```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
+```
+
+You only need to do this once per terminal session. All openclaw commands below assume nvm is loaded.
 
 ---
 
 ## Step 1 — Install OpenClaw
 
 ```bash
-cd ~/openclaw
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
 npm install -g openclaw
 openclaw --version
 ```
@@ -26,82 +38,102 @@ Paste the output. I need to see a version number before we continue.
 
 ## Step 2 — Run onboard
 
-The onboard wizard collects your API keys, configures the gateway, and registers OpenClaw as a **systemd service** so it survives reboots.
+The onboard wizard collects your API keys, configures the gateway, and registers OpenClaw as a **user-level systemd service**.
 
 ```bash
 openclaw onboard --install-daemon
 ```
 
-You will be prompted interactively for:
-- **LLM provider**: select per `deployment-brief.md` (Anthropic recommended)
-- **API key**: paste when prompted — it will not echo to screen. Do not pass it as a CLI argument.
-- **Model**: `claude-sonnet-4-6` is a good default; `claude-opus-4-6` for maximum quality
-- **Gateway port**: accept the default (usually 3000) unless it conflicts with something already running
-- **Daemon install**: confirm yes — this registers the systemd unit
+**QuickStart flow** — when prompted, choose:
+- **Setup mode**: QuickStart (configure details later)
+- **Channel**: Telegram (Bot API) — simplest starting point
+- **Telegram bot token**: paste your token from @BotFather
+  - ⚠️ Copy the token text directly from the BotFather chat message — do NOT use the copy button (clipboard issues on some systems)
+  - ⚠️ Paste ONLY the token (e.g. `123456789:ABCdef...`) — do not include the bot username
+- **DM policy warning**: noted — you will lock it down via pairing after install
+- **Web search provider**: Skip for now
+- **Hooks**: Skip for now
+
+Do not pass your API key as a CLI argument — paste it when prompted interactively.
 
 When onboard finishes, tell me what it printed at the end.
 
 ---
 
-## Step 3 — Verify systemd service
+## Step 3 — Verify user systemd service
+
+OpenClaw registers as a **user-level** service, not a system service. Always use `systemctl --user`:
 
 ```bash
-sudo systemctl status openclaw
+systemctl --user status openclaw-gateway
 ```
 
-Paste the output. Expected: `active (running)`. If not, also paste:
+Paste the output. Expected: `active (running)`.
 
+If not running, check logs:
 ```bash
-sudo journalctl -u openclaw -n 50 --no-pager
+journalctl --user -u openclaw-gateway -n 50 --no-pager
 ```
 
-Then verify it is enabled on boot:
-
+Verify it starts on boot:
 ```bash
-sudo systemctl is-enabled openclaw
+systemctl --user is-enabled openclaw-gateway
 ```
 
-Expected output: `enabled`
+Expected: `enabled`
+
+Also enable **linger** so the service starts at boot even before you log in:
+```bash
+sudo loginctl enable-linger $USER
+```
 
 ---
 
-## Step 4 — Verify .env
+## Step 4 — Verify config file permissions
+
+OpenClaw stores config (including your API key) in `~/.openclaw/openclaw.json`:
 
 ```bash
-ls -la ~/openclaw/.env
+stat ~/.openclaw/openclaw.json
+ls -la ~/.openclaw/
 ```
 
-Paste the output. The file must exist and show permissions `600`. If permissions are not `600`:
+Paste the output. Expected: `~/.openclaw/openclaw.json` with mode `600`, `~/.openclaw/` directory with mode `700`.
 
+If not `600`:
 ```bash
-chmod 600 ~/openclaw/.env
+chmod 600 ~/.openclaw/openclaw.json
+chmod 700 ~/.openclaw
 ```
 
-Do not print or `cat` the `.env` file — it contains your API key.
+Do not `cat` the config file — it contains your API key.
 
 ---
 
-## Step 5 — Verify gateway responds
+## Step 5 — Get dashboard URL and verify gateway
+
+The gateway port is assigned dynamically (not always 3000). Get the correct URL:
 
 ```bash
-curl -s http://localhost:3000/health
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
+openclaw gateway url
 ```
 
-Paste the output. Expected: `{"status":"ok"}` or similar healthy response. Adjust the port number if you changed it during onboard.
+This opens the dashboard in your browser and prints the tokenized URL. **Bookmark this URL** — you'll use it to access the dashboard going forward.
+
+Paste the URL printed (it's safe to share — it's a local URL).
 
 ---
 
 ## Step 6 — Check logs
 
 ```bash
-sudo journalctl -u openclaw -n 50 --no-pager
+cat /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log | tail -30
 ```
 
 Paste the output. Look for:
-- A line like `Gateway started on port XXXX`
+- A line like `starting channels and sidecars`
 - No `ERROR` or `FATAL` lines
-
-If errors appear, share them here before continuing.
 
 ---
 
@@ -110,11 +142,13 @@ If errors appear, share them here before continuing.
 Confirm each by pasting command output:
 
 - [ ] `openclaw --version` returns a version
-- [ ] `sudo systemctl status openclaw` shows `active (running)`
-- [ ] `sudo systemctl is-enabled openclaw` returns `enabled`
-- [ ] `curl http://localhost:3000/health` returns a healthy response
-- [ ] `ls -la ~/openclaw/.env` shows the file exists with permissions `600`
-- [ ] No fatal errors in `journalctl -u openclaw`
+- [ ] `systemctl --user status openclaw-gateway` shows `active (running)`
+- [ ] `systemctl --user is-enabled openclaw-gateway` returns `enabled`
+- [ ] `loginctl show-user $USER | grep Linger` returns `Linger=yes`
+- [ ] `openclaw gateway url` opens dashboard successfully
+- [ ] `~/.openclaw/openclaw.json` exists with permissions `600`
+- [ ] `~/.openclaw/` has permissions `700`
+- [ ] No fatal errors in today's log file
 
 ---
 
