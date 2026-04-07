@@ -1,0 +1,27 @@
+# Secrets — never commit these
+.env
+*.env
+credentials.json
+token.json
+*.pem
+*.key
+
+# Personal deployment artifacts
+deployment-brief.md
+runbook.md
+workflows.md
+system-prompt.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node
+node_modules/
+npm-debug.log*
