@@ -22,6 +22,18 @@
 
 **The kit has been validated on exactly one machine configuration.** Everything else is based on documentation review, structural analysis, or inference from the Ubuntu path.
 
+### Real-world test run log — v0.1.0 (2026-04-07)
+
+- **OS**: Ubuntu 24.04.4 LTS
+- **Hardware**: ASUS ZenBook UX305FA, Intel Core M-5Y10, 8 GB RAM, fanless, x86_64
+- **Interface**: Claude Code (tool-executing mode)
+- **Phases completed**: All 8 (0a–7)
+- **Integrations tested**: Telegram ✅, WhatsApp Path A with Cloudflare named tunnel ✅
+- **Thermal baseline**: idle ~39°C, peak ~53°C under `stress-ng --cpu 2 --timeout 30s` — within safe limits for this hardware
+- **Hardware notes**: Core M is designed for burst workloads, not sustained 24/7 load. For personal assistant use (low concurrency, intermittent requests) it is comfortable. 8 GB RAM has headroom in gateway mode. If migrating to always-on VPS later, Phases 3–7 are unchanged — only Phase 2 needs VPS-specific firewall rules.
+- **First phase that deviated from skill files**: Phase 3 — `openclaw onboard` behaviour and config file locations differed from initial kit assumptions; skill files were updated after this run
+- **Kit updates made**: Full rewrite of skills/03, 04, 05, 06, 07 based on this run's findings
+
 ---
 
 This document also covers:
