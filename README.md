@@ -11,6 +11,12 @@ Eight guided phases (including orientation). The agent guides you step by step �
 > This kit is usable today, but it is still a beta release rather than a broadly validated polished public release.
 > The tested path is narrow and explicitly documented below.
 
+**Current best-fit use case**
+- You want a structured OpenClaw install on Ubuntu 24.04
+- You are using Claude Code or another guided terminal workflow
+- You want Telegram first, with WhatsApp Path A as the next best-tested extension
+- You care about durability, security hardening, and a real runbook at the end
+
 ---
 
 ## Why this kit?
@@ -53,8 +59,10 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 
 ## Requirements
 
-- A machine running **Ubuntu 20.04+ (24.04 recommended)** or Debian 11+ — fully supported and tested
-  - Raspberry Pi OS 64-bit (ARM64): supported with minor adaptations (not yet validated)
+- A machine running **Ubuntu 20.04+ (24.04 recommended)** or Debian 11+
+  - Ubuntu 24.04 is the tested path
+  - Debian 11+: documented, but not yet validated end to end
+  - Raspberry Pi OS 64-bit (ARM64): documented with minor adaptations, not yet validated
   - macOS 12+: Phase 2 commands require Homebrew substitutions; not guided step-by-step and not yet validated — see Phase 2 notes
   - Windows: not supported natively — use WSL2
   - Not sure what machine to use? Phase 0a (Computing Selection) helps you decide
