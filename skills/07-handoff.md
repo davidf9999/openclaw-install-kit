@@ -14,7 +14,7 @@
 
 ## Instructions
 
-Generate `runbook.md` by filling in the template below. Use `deployment-brief.md` and information gathered during the install to fill all placeholders. Then run the final verification checklist.
+Generate `runbook.md` by filling in the template below. Use `deployment-brief.md` and information gathered during the install to fill all placeholders. Then run the backup step and final verification checklist — in that order.
 
 ---
 
@@ -129,31 +129,67 @@ sudo certbot renew --dry-run
 ## Backup
 
 ### What to back up
-- `~/.openclaw/openclaw.json` — full config (contains API key and bot tokens — handle securely)
-- `~/.openclaw/workspace/IDENTITY.md` — assistant persona
-- `~/.openclaw/workspace/USER.md` — user profile
-- `~/.openclaw/workspace/SOUL.md` — assistant values
-- `~/openclaw/system-prompt.md` — system prompt source (if created)
-- `~/openclaw/workflows.md` — scheduled workflows (if configured)
 
-### Backup command
+| Path | Contents | Notes |
+|---|---|---|
+| `~/.openclaw/openclaw.json` | API keys, bot tokens, all config | Sensitive — never commit or share |
+| `~/.openclaw/workspace/` | IDENTITY.md, USER.md, SOUL.md | Assistant persona and user profile |
+| `~/.openclaw/agents/main/sessions/` | Full chat history (`.jsonl` files) | Optional — can be large; contains conversation content |
+| `~/openclaw/system-prompt.md` | System prompt source | If created in Phase 6 |
+| `~/openclaw/workflows.md` | Scheduled workflows | If configured |
+
+**Chat sessions note**: sessions contain the full conversation history with your assistant. Including them means you can restore continuity after a hardware failure. Excluding them makes the backup smaller. Decide based on privacy preference and available storage.
+
+### Run the backup now
+
 ```bash
+# With chat sessions (recommended):
 tar -czf ~/openclaw-backup-$(date +%Y%m%d).tar.gz \
   ~/.openclaw/openclaw.json \
-  ~/.openclaw/workspace/IDENTITY.md \
-  ~/.openclaw/workspace/USER.md \
-  ~/.openclaw/workspace/SOUL.md \
+  ~/.openclaw/workspace/ \
+  ~/.openclaw/agents/main/sessions/ \
   ~/openclaw/system-prompt.md \
   ~/openclaw/workflows.md \
   2>/dev/null
+
+# Without chat sessions:
+tar -czf ~/openclaw-backup-$(date +%Y%m%d).tar.gz \
+  ~/.openclaw/openclaw.json \
+  ~/.openclaw/workspace/ \
+  ~/openclaw/system-prompt.md \
+  ~/openclaw/workflows.md \
+  2>/dev/null
+
+echo "Backup size: $(du -sh ~/openclaw-backup-$(date +%Y%m%d).tar.gz)"
 ```
 
-Store off-machine — external drive or encrypted cloud storage.
+Paste the output — confirm the file was created and the size looks reasonable.
 
-### Restore (on fresh machine after skills 02–03)
+### Copy off-machine (do this now, not later)
+
+Choose one of the following:
+
+```bash
+# Option A — USB drive (replace /media/yourname/drive with your mount point):
+cp ~/openclaw-backup-$(date +%Y%m%d).tar.gz /media/$USER/*/
+
+# Option B — another machine on your network via scp:
+scp ~/openclaw-backup-$(date +%Y%m%d).tar.gz user@192.168.x.x:~/backups/
+
+# Option C — cloud storage via rclone (install: sudo apt install rclone, then rclone config):
+rclone copy ~/openclaw-backup-$(date +%Y%m%d).tar.gz remote:backups/
+
+# Option D — private GitHub repo (config only, no sessions — never push openclaw.json to a public repo):
+# Not recommended for openclaw.json — use options A–C for the encrypted archive instead
+```
+
+If none of these are set up yet, copy to a USB drive now and set up rclone later. The backup file is useless if it lives only on the machine it's meant to protect.
+
+### Restore (on fresh machine after Phases 2–3)
 ```bash
 tar -xzf openclaw-backup-YYYYMMDD.tar.gz -C ~/
 chmod 600 ~/.openclaw/openclaw.json
+chmod 700 ~/.openclaw
 systemctl --user restart openclaw-gateway
 ```
 
@@ -219,7 +255,8 @@ Run through this checklist. Paste output or confirm verbally:
 - [ ] Send a test message via primary messaging platform — response received
 - [ ] `sensors` baseline within acceptable range (fanless hardware)
 - [ ] `~/openclaw/runbook.md` written — paste `ls -la ~/openclaw/`
-- [ ] Backup created and stored off-machine
+- [ ] Backup archive created — paste `ls -lh ~/openclaw-backup-*.tar.gz`
+- [ ] Backup copied off-machine (USB, scp, or rclone) — confirm destination
 - [ ] User knows how to restart the gateway
 - [ ] User knows how to view logs
 - [ ] User knows how to update OpenClaw
