@@ -80,6 +80,7 @@ Will OpenClaw need to be reachable 24/7, or is it acceptable for it to go offlin
 | Raspberry Pi 4 (4 GB+) | Works — note ARM64 differences in Phase 2 |
 | Mac (Intel or Apple Silicon) | Works — note Homebrew substitutions in Phase 2 |
 | No machine, no budget | Oracle Cloud Free Tier — limited but free |
+| Want Terraform-managed AWS EC2 | Use [openclaw-lab-on-cloud](https://github.com/carlosacchi/openclaw-lab-on-cloud) for provisioning, then **pick up this kit at Phase 3** — Phases 0–2 are handled by that Terraform deployment |
 
 ---
 

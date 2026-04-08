@@ -26,6 +26,9 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 | Journey kit format | ✓ | — | — |
 | Fanless hardware support | ✓ | — | — |
 
+> Using **openclaw-lab-on-cloud** to provision your AWS EC2 instance? That tool handles OS and networking — start this kit at Phase 3.  
+> For a detailed comparison including Open WebUI, AnythingLLM, and what each alternative taught us, see [docs/ALTERNATIVES.md](docs/ALTERNATIVES.md).
+
 ---
 
 ## Phases

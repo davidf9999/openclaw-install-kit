@@ -45,4 +45,6 @@ OpenClaw will call a cloud provider (Anthropic, OpenAI, etc.) for every response
 
 ---
 
+**Expert fast path**: If the user already has a `deployment-brief.md` from a previous install, or knows their setup well enough to fill in the template themselves, they can skip Phase 1 entirely. Ask them to confirm the file is complete, then go directly to Phase 2.
+
 Once the user confirms they're ready, proceed to **Phase 1 — Discovery** (`skills/01-discovery.md`).

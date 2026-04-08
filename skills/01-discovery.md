@@ -7,7 +7,12 @@
 
 > **Phase 1 of 8 — Discovery**  
 > This phase is entirely conversational — no terminal commands. Ask questions, collect answers, write the brief.  
-> If you are re-entering this phase, ask the user to confirm whether `deployment-brief.md` already exists before asking questions again.
+> If you are re-entering this phase, ask the user to confirm whether `deployment-brief.md` already exists before asking questions again.  
+>  
+> **Expert fast path — skip this phase if:**  
+> (a) `deployment-brief.md` already exists from a previous install, or  
+> (b) the user knows their setup and is willing to fill in the template below directly.  
+> In either case, verify the file exists and is complete, then proceed straight to Phase 2.
 
 ---
 

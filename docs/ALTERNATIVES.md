@@ -41,7 +41,7 @@ A popular self-hosted web UI for Ollama, OpenAI, and other LLM backends. Docker-
 
 **Relevance:** Different product class (local/web UI vs. messaging-channel assistant), but it solves the "I want a personal AI that persists on my machine" problem for many users. Its installation is Docker-first, which is simpler than the npm + systemd path this kit uses.
 
-**What to learn from it:** Docker packaging significantly reduces the dependency management problem (Node.js versions, nvm, global npm). A Phase 2 variant that installs OpenClaw as a Docker container — if OpenClaw supports that — would make this kit more accessible to less technical users and eliminate the nvm complexity entirely.
+**What to learn from it:** Docker packaging reduces the dependency management problem (Node.js versions, nvm, global npm). OpenClaw does support Docker — see [docs.openclaw.ai/install/docker](https://docs.openclaw.ai/install/docker) — but the official docs explicitly state: *"No: you are running on your own machine and just want the fastest dev loop. Use the normal install flow instead."* Docker is best suited for VPS/server deployments or sandboxed environments, not personal laptop installs. A future Phase 2 Docker variant would be valuable for VPS users who want container management over systemd.
 
 ### [AnythingLLM](https://github.com/Mintplex-Labs/anything-llm)
 
@@ -82,15 +82,13 @@ This kit is itself published in the Journey kit format. Journey is a registry fo
 
 ---
 
-## Potential gaps to address
+## Gaps and their status
 
-Based on this comparison, three gaps stand out:
+**1. No fast path for expert users** ✅ Addressed  
+Phase 1 (Discovery) can now be skipped if `deployment-brief.md` already exists or the user fills in the template directly. Noted in kit.md, orientation, and the Phase 1 skill header.
 
-**1. No fast path for clean VPS users**  
-Expert users provisioning a fresh VPS don't need the discovery interview — they know their setup. A "skip to Phase 2 if you already have deployment-brief.md" shortcut would close this gap without removing the guided path for everyone else.
+**2. No Docker install path** — Partially addressed (documented, not implemented  
+OpenClaw supports Docker. The official docs recommend against it for personal laptop installs ("use the normal install flow instead") but it is the right choice for VPS deployments where container management is preferred over systemd. A future Phase 2 Docker variant for VPS users would eliminate nvm complexity. Not implemented in this kit yet.
 
-**2. No Docker install path**  
-Docker would eliminate the nvm/Node dependency management problem. If OpenClaw supports Docker, a Phase 2 variant should exist.
-
-**3. No IaC/Terraform path for infrastructure**  
-Users who want GitOps-style reproducibility have no equivalent in this kit. A pointer to `openclaw-lab-on-cloud` for the VPS provisioning step — with this kit picking up from Phase 3 onward — would be honest and useful rather than trying to cover everything in one kit.
+**3. No IaC/Terraform path for infrastructure** ✅ Addressed  
+`openclaw-lab-on-cloud` handles Terraform-managed AWS EC2 provisioning. The kit now explicitly tells users to start at Phase 3 if they used that tool for provisioning. Noted in kit.md, the computing-selection skill, and README.

@@ -133,6 +133,10 @@ Not suitable for:
 - Windows native installs (use WSL2 + adapt infra phase)
 - Managed/hosted OpenClaw offerings
 
+**Expert fast path**: If you already have a completed `deployment-brief.md` (from a prior install or written manually), skip Phase 1 and go straight to Phase 2.
+
+**Using openclaw-lab-on-cloud or another IaC tool for provisioning?** Those tools handle OS provisioning, networking, and firewall configuration. Start this kit at Phase 3 — Phases 0–2 are already done.
+
 ## Setup
 
 ### Prerequisites
