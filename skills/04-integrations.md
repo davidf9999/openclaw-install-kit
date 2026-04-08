@@ -121,7 +121,17 @@ Send yourself a WhatsApp message. Gordo should respond.
 
 ### Path B — Separate/business number (Meta Business API)
 
-> ⚠️ Requires a public HTTPS endpoint and Meta Business API approval (1–3 days).
+> ⚠️ Requires a public HTTPS endpoint and Meta Business API approval (1–3 days).  
+> ⚠️ **This path has not been tested in this kit.** The instructions below are based on Meta's documentation. If you encounter issues, please open an issue with your output — your report will help validate this path.
+
+**Pre-flight checklist — confirm before starting:**
+- [ ] Meta app created at developers.facebook.com with WhatsApp product added
+- [ ] App has been approved for the WhatsApp Business API (check App Dashboard → Status)
+- [ ] You have a **Phone Number ID** (not the phone number itself — a numeric ID from the API setup)
+- [ ] You have a **Permanent Access Token** (not a temporary token — generate a System User token)
+- [ ] You have a public HTTPS domain for the webhook (required; Meta will not accept IP addresses or HTTP)
+
+If any of these are not in place, stop here — the integration will not work until they are.
 
 1. Go to developers.facebook.com → Create a new app → Add the WhatsApp product
 2. Get your **Phone Number ID** and **Permanent Access Token**

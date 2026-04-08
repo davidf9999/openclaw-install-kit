@@ -1,0 +1,28 @@
+name: Validate kit.md schema
+
+on:
+  push:
+    paths:
+      - 'kit.md'
+      - 'skills/**'
+  pull_request:
+    paths:
+      - 'kit.md'
+      - 'skills/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Validate kit.md schema
+        run: python3 .github/scripts/validate_kit.py

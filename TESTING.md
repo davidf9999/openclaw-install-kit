@@ -189,6 +189,25 @@ Template:
 
 ---
 
+## Current real-world test coverage
+
+As of v0.1.0, the kit has been fully run end-to-end on exactly one configuration:
+
+| Field | Value |
+|---|---|
+| Hardware | ASUS ZenBook UX305FA |
+| CPU | Intel Core M-5Y10 (fanless) |
+| Architecture | x86_64 |
+| OS | Ubuntu 24.04 LTS |
+| Interface | Claude Code (tool-executing mode) |
+| Phases completed | All 8 (0a–7) |
+| Integrations verified | Telegram, WhatsApp Path A (personal number), Cloudflare named tunnel |
+| Integrations not tested | WhatsApp Path B, Slack, Email, Google Calendar, Google Contacts, GitHub, local disk |
+
+Everything else is theoretical or based on documentation review.
+
+---
+
 ## Known gaps not yet tested
 
 - Debian 12 (apt + ufw should work identically, not yet verified)

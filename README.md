@@ -112,9 +112,15 @@ The natural next step is [`keylimeaistudios/ai-employee-starter`](https://www.jo
 
 ## Status
 
-`v0.1.0` — first working draft, being tested on Ubuntu / ASUS UX305F. Not yet published to the Journey registry. Publish planned after real-world validation.
+`v0.1.0` — first working draft.
 
-Contributions and issue reports welcome.
+**Validated on**: Ubuntu 24.04 LTS, ASUS ZenBook UX305FA (Intel Core M, fanless, x86_64). This is the only hardware and OS combination that has been real-world tested to date.
+
+Not yet validated on: Debian, macOS, Raspberry Pi / ARM64, VPS, or any hardware other than the UX305FA. WhatsApp Path B (Meta Business API) has not been tested. See TESTING.md for the full validation status and known gaps.
+
+Not yet published to the Journey registry. Publish planned after broader real-world validation.
+
+Contributions and test reports welcome — see CONTRIBUTING.md.
 
 ---
 
