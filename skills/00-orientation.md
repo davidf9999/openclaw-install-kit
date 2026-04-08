@@ -27,6 +27,10 @@ Welcome. This kit will install **OpenClaw** on your Linux or macOS machine and s
 **Important — this kit uses cloud LLM APIs only:**  
 OpenClaw will call a cloud provider (Anthropic, OpenAI, etc.) for every response. You will need an API key and will pay per-token usage fees. **Local models (Ollama, Llama, Mistral, etc.) are not covered by this kit.** If that's what you want, stop here and see the OpenClaw local LLM documentation instead.
 
+**Cost**: API calls are billed per token by your provider. Light personal use (tens of messages per day) typically costs a few dollars per month. Heavy use or long conversations cost more. Set a spend limit on your API account before starting — most providers offer this in the billing settings.
+
+**Privacy**: Every message you send to OpenClaw — and every message sent to it by your contacts (WhatsApp, Telegram, etc.) — is sent to your chosen cloud LLM provider for processing. Your contacts' messages are included. If you choose Anthropic (Claude), messages are processed under Anthropic's privacy policy. Consider this before connecting platforms where others message you.
+
 **How long it takes:**
 - 8 phases, roughly 30–60 minutes of active work
 - Most of that is you running commands and me guiding and verifying

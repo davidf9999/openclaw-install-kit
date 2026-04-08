@@ -99,6 +99,8 @@ Check `deployment-brief.md` for which WhatsApp path was chosen during discovery.
 Uses your existing WhatsApp account. No Meta approval needed. Requires a public HTTPS URL for the webhook — use Cloudflare Tunnel if you have no domain.
 
 > ⚠️ Less stable than the API path — may break on WhatsApp updates. Requires keeping a browser session alive. Fine for personal use.
+>
+> ⚠️ **WhatsApp Terms of Service**: Using whatsapp-web.js on a personal number violates WhatsApp's Terms of Service (section 7.1 — automated/programmatic clients). Meta has banned accounts for this. Risk is lower for personal, single-user use than bulk messaging, but it is real. Only proceed if you accept this risk. If ToS compliance matters, use a dedicated number via Path B instead.
 
 **Step 1 — Install Cloudflare Tunnel** (skip if you already have a domain + SSL):
 ```bash
@@ -166,6 +168,8 @@ cat /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log | tail -30
 
 ## Slack (if selected)
 
+> ⚠️ **Not yet validated in this kit.** The steps below are documented based on the OpenClaw Slack integration but have not been tested end to end. Proceed carefully and report any issues.
+
 1. Go to api.slack.com/apps → Create New App → **From scratch**
 2. Enable **Socket Mode** (avoids need for a public URL)
 3. Add OAuth scopes: `chat:write`, `im:history`, `im:read`
@@ -186,6 +190,8 @@ Send a DM to your bot in Slack to verify.
 
 ## Email — IMAP/SMTP (if selected)
 
+> ⚠️ **Not yet validated in this kit.** The steps below are documented but have not been tested end to end. Proceed carefully and report any issues.
+
 Use an app-specific password if using Gmail or Outlook — not your main account password.
 
 ```bash
@@ -203,6 +209,8 @@ systemctl --user restart openclaw-gateway
 ---
 
 ## Google Workspace — Calendar and Contacts (if selected)
+
+> ⚠️ **Not yet validated in this kit.** The steps below are documented but have not been tested end to end. Proceed carefully and report any issues.
 
 **Only proceed if listed in `deployment-brief.md`. Enable only the specific APIs selected.**
 
@@ -233,6 +241,8 @@ Test via the dashboard or Telegram:
 
 ## GitHub (if selected)
 
+> ⚠️ **Not yet validated in this kit.** The steps below are documented but have not been tested end to end. Proceed carefully and report any issues.
+
 1. Go to github.com → Settings → Developer settings → Personal access tokens → Tokens (classic)
 2. Generate a token with scopes: `repo`, `read:user`, `read:org`
 
@@ -249,6 +259,10 @@ Test via Telegram or dashboard:
 ---
 
 ## Local disk access (if selected)
+
+> ⚠️ **Not yet validated in this kit.** The steps below are documented but have not been tested end to end. Proceed carefully and report any issues.
+>
+> ⚠️ **Scope warning**: `~` (home directory) includes sensitive files: SSH private keys (`~/.ssh/`), browser profiles, `~/.openclaw/openclaw.json` (your API keys), and any other files stored under your home directory. OpenClaw will be able to read all of these if asked. Only enable this if you trust the scope and have considered what the assistant can access.
 
 ```bash
 openclaw config set filesystem.allowed_paths "~"

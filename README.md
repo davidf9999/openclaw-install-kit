@@ -5,6 +5,12 @@ A [Journey kit](https://www.journeykits.ai) for installing, integrating, hardeni
 > **No GPU. No local model. No Ollama.**  
 > This kit connects OpenClaw to a cloud LLM provider. If you want to run a local model (Llama, Mistral, Ollama, etc.) instead of a cloud API, this kit is not what you need — see the [OpenClaw local LLM docs](https://docs.openclaw.ai) for that path.
 
+> **Cost**: API calls are billed per token by your provider. Light personal use typically costs a few dollars per month. Set a spend limit on your API account before starting.
+
+> **Privacy**: Every message processed by OpenClaw — including messages sent by your contacts via Telegram, WhatsApp, etc. — is sent to your cloud LLM provider. Your contacts' messages are included. Review your provider's privacy policy before connecting platforms where others message you.
+
+> **WhatsApp Path A (personal number)**: Using whatsapp-web.js violates WhatsApp's Terms of Service. Meta has banned accounts for this. Risk is lower for personal single-user use, but it is real. Only use this path if you accept that risk.
+
 Eight guided phases (including orientation). The agent guides you step by step — you run commands in your terminal, paste the output back, and the agent verifies before moving on. Produces a written runbook at the end.
 
 > **Beta status**

@@ -26,6 +26,8 @@ You only need to do this once per terminal session. All openclaw commands below 
 
 ## Step 1 — Install OpenClaw
 
+> **No account required**: OpenClaw is installed as an npm package and connects directly to your LLM provider API key. You do not need to register or create an OpenClaw account.
+
 ```bash
 export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
 npm install -g openclaw
@@ -33,6 +35,8 @@ openclaw --version
 ```
 
 Paste the output. I need to see a version number before we continue.
+
+> **Version note**: This kit was developed and tested against OpenClaw **2026.4.5**. If your version differs, things will likely still work, but flag any unexpected behavior — it may indicate a version mismatch.
 
 ---
 

@@ -207,6 +207,55 @@ systemctl --user restart openclaw-gateway
 | nvm / openclaw not found | Run `export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"` first |
 | Google integration fails | `token.json` expired — delete `~/.openclaw/token.json`, re-run `openclaw auth google` |
 | High CPU/temp | `sensors`, reduce `gateway.max_concurrent_tasks` |
+| LLM API call fails / no response | Check API key in `~/.openclaw/openclaw.json`; check provider status page; check spend limits on your API account |
+| Disk filling up | `du -sh ~/.openclaw/agents/main/sessions/` — prune old session `.jsonl` files (see Log rotation section) |
+
+---
+
+## Log rotation
+
+Logs are written to `/tmp/openclaw/` as daily files (`openclaw-YYYY-MM-DD.log`). Files in `/tmp` are cleared on reboot. Chat sessions accumulate in `~/.openclaw/agents/main/sessions/` as `.jsonl` files and are not automatically pruned.
+
+To check current log and session sizes:
+```bash
+du -sh /tmp/openclaw/
+du -sh ~/.openclaw/agents/main/sessions/
+```
+
+To prune old session files (keeps last 30 days):
+```bash
+find ~/.openclaw/agents/main/sessions/ -name "*.jsonl" -mtime +30 -delete
+```
+
+No automatic log rotation is configured by default. If you are running long-term and disk space is a concern, add a cron job or logrotate rule.
+
+---
+
+## Uninstall
+
+To remove OpenClaw from this machine:
+
+```bash
+# Stop and disable the service
+systemctl --user stop openclaw-gateway
+systemctl --user disable openclaw-gateway
+
+# Disable linger (if set)
+sudo loginctl disable-linger $USER
+
+# Remove the npm package
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
+npm uninstall -g openclaw
+
+# Remove config and workspace (IRREVERSIBLE — back up first)
+# rm -rf ~/.openclaw/
+
+# Remove the systemd unit file if it was not removed by npm uninstall
+rm -f ~/.config/systemd/user/openclaw-gateway.service
+systemctl --user daemon-reload
+```
+
+**Before uninstalling**: revoke all tokens you issued (Telegram bot token via @BotFather, WhatsApp session, Slack tokens, GitHub token, Google OAuth via myaccount.google.com → Security → Third-party access). Tokens left active can still be used even after the software is removed.
 
 ---
 
