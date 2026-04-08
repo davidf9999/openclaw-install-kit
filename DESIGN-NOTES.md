@@ -92,6 +92,47 @@ Each skill's completion check should only verify what that skill itself set up. 
 
 ---
 
+## Dual-runtime design (intentional)
+
+This kit is designed to work in two distinct execution modes simultaneously. This is a deliberate design choice, not an accident.
+
+**Mode 1 — Claude Code (tool-executing)**  
+The agent has `bash`, `read`, `write`, and `edit` tools. It runs commands directly, reads output, and decides what to do next without user involvement in terminal steps. This is the fastest path and was used during the kit's own development and testing.
+
+**Mode 2 — Journey AI / plain chat (clipboard model)**  
+The agent has no tool access. It can only produce text. Every command block is followed by an explicit "run this and paste the output here" instruction. The user runs the command, pastes the output into the chat, and the agent reads and verifies before continuing. This is the designed pattern for Journey AI and any plain chat interface (Claude.ai, ChatGPT, etc.).
+
+**How the skill files support both modes simultaneously**:
+- Command blocks are formatted as copy-pasteable bash (works in both modes)
+- Every block is followed by "paste the output" — essential in clipboard mode, harmless in tool-executing mode (the agent already has the output)
+- The "you will run all commands yourself" framing at the top of each infra skill is for clipboard-mode users; tool-executing agents ignore it
+- Verification steps ("paste the output of `node --version`") serve as explicit confirmation in clipboard mode and as a structured check in tool-executing mode
+
+**Why this matters for publishing**: A kit that only works in Claude Code limits the audience to users with that specific tool. Supporting the clipboard model means any user with any chat interface can follow the kit — with the same instructions, the same command blocks, and the same verification steps.
+
+---
+
+## Journey kit vs the Claude skill-creator
+
+The individual skill files (`skills/NN-name.md`) are exactly the kind of content the Claude skill-creator produces: self-contained instructions for a specific task, formatted for an AI agent to follow. The skill-creator is the right tool for generating the content inside each file.
+
+What the skill-creator does not produce — and what the kit adds:
+
+| What the kit adds | Why it matters |
+|---|---|
+| **Phase sequencing with explicit gates** | Phases cannot be skipped; each completion check must pass before the next begins |
+| **Shared artifact chain** | `deployment-brief.md` is produced once and consumed by all subsequent phases; each phase adapts its behavior based on flags in the brief |
+| **Recovery / re-entry logic** | Each skill can be re-entered after a session break or context loss; the file on disk is the persistent state, not the conversation |
+| **Input/output contracts** | Each skill declares what it requires and what it produces; this makes the kit auditable and testable |
+| **Known failure patterns** | `kit.md` lists failure modes with resolutions; skill files include inline recovery paths |
+| **Dual-runtime declaration** | `kit.md` declares platform compatibility explicitly; skill files are written to support both modes |
+
+**The relationship in one sentence**: the skill-creator produces the ingredients (individual skills); the kit adds the orchestration (sequencing, artifact chain, recovery, contracts).
+
+**A journey kit can be seen as a way to compose skill-creator output into a pipeline** — adding the dimensions that a single skill file cannot provide on its own.
+
+---
+
 ## What works well — keep these
 
 - `deployment-brief.md` as a shared artifact between phases. Each skill reads it and adapts. This is exactly the right pattern for a stateless conversational runtime.

@@ -28,7 +28,8 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 
 | # | Skill | What happens |
 |---|---|---|
-| 0 | `skills/00-orientation.md` | Brief the user — what they'll get, how it works |
+| 0a | `skills/00-computing-selection.md` | Confirm or decide what machine and OS to use |
+| 0b | `skills/00-orientation.md` | Brief the user — what they'll get, how it works |
 | 1 | `skills/01-discovery.md` | Interview → `deployment-brief.md` |
 | 2 | `skills/02-infra.md` | Node 24, ufw firewall, SSL, thermal monitoring |
 | 3 | `skills/03-openclaw-core.md` | Install + systemd daemon + health check |
@@ -41,7 +42,10 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 
 ## Requirements
 
-- Ubuntu 20.04+ (22.04+ recommended)
+- A machine running Ubuntu 20.04+ (24.04 recommended), Debian 11+, or macOS 12+
+  - Raspberry Pi OS 64-bit (ARM64) works with minor adaptations
+  - Windows is not supported natively — use WSL2
+  - Not sure what machine to use? Phase 0a (Computing Selection) helps you decide
 - Terminal or SSH access to the target machine
 - An API key from a supported LLM provider (Anthropic recommended)
 - A domain name is optional — Telegram works in long-poll mode without one
@@ -77,6 +81,28 @@ The following files are produced during install and gitignored — they stay on 
 - `workflows.md` — scheduled tasks configuration
 
 ---
+
+## How this kit works across different interfaces
+
+This kit is designed for two execution modes:
+
+**Claude Code (tool-executing)**: The agent runs all terminal commands directly. You review output and approve actions. Fastest path — used during the kit's own development.
+
+**Journey AI or any chat interface (clipboard model)**: The agent has no terminal access. Each skill gives you a command block, asks you to run it and paste the output back, and verifies the result before moving on. Every command in the skill files is formatted for this pattern.
+
+Both modes are supported throughout. You do not need to choose — just use whichever interface you have.
+
+## How this kit relates to the Claude skill-creator
+
+The individual skill files are the kind of content the Claude skill-creator produces. The kit adds a composition layer on top: phase sequencing with explicit gates, a shared artifact chain (`deployment-brief.md` carries all decisions from Phase 1 through Phase 7), recovery and re-entry logic for each phase, and explicit input/output contracts between phases. The skill-creator produces the ingredients; the kit adds the orchestration.
+
+## Kit composition chain
+
+This kit sits in the middle of a natural three-kit sequence:
+
+1. **`compute-selection-kit`** *(suggested — not yet published)* → machine running a compatible OS, terminal access confirmed
+2. **`openclaw-install-kit`** *(this kit)* → running OpenClaw with integrations, security hardening, and a written runbook
+3. **`openclaw-employee-kit`** *(see below)* → structured AI employee with scheduled briefings and reporting
 
 ## After install
 

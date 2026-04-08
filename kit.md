@@ -23,6 +23,7 @@ tools:
   - write
   - edit
 skills:
+  - skills/00-computing-selection.md
   - skills/00-orientation.md
   - skills/01-discovery.md
   - skills/02-infra.md
@@ -58,18 +59,27 @@ environment:
   os: linux
   platforms:
     - claude-code
+    - journey-ai
   adaptationNotes: >
-    Designed for Journey AI's conversational runtime: the agent guides the user step by step,
-    the user runs all commands manually and pastes output back for verification.
-    The agent cannot execute commands directly — this is by design.
-    Also compatible with Claude Code (tool-executing mode) for local installs.
+    Dual-runtime design: works in two distinct execution modes.
+    (1) Claude Code (tool-executing): the agent runs commands directly, reads output, and
+    proceeds without user involvement in terminal steps.
+    (2) Journey AI / plain chat (clipboard model): the agent gives command blocks, the user
+    runs them manually in their terminal, pastes output back, and the agent verifies before
+    continuing. Every command block in the skill files is formatted for this paste-and-verify
+    pattern — it is harmless in Claude Code and essential in Journey AI.
     Tested on Ubuntu 22.04+ and 24.04 on bare metal and VPS.
+    Also supported with adaptations: Debian 11/12 (identical apt/ufw), macOS 12+ (Homebrew
+    substitutions in Phase 2), Raspberry Pi OS 64-bit (ARM64 cloudflared binary).
     Fanless/low-power hardware (e.g. Intel Core M) is supported with thermal monitoring notes.
 selfContained: true
 fileManifest:
   - path: kit.md
     role: primary
     description: Master workflow guide and kit metadata
+  - path: skills/00-computing-selection.md
+    role: skill
+    description: Computing selection — helps user decide what machine and OS to use before installation begins
   - path: skills/00-orientation.md
     role: skill
     description: Orientation — delivered before Phase 1; sets expectations for the collaboration model
@@ -124,20 +134,56 @@ Not suitable for:
 ## Setup
 
 ### Prerequisites
-- Ubuntu 20.04 or later (22.04+ recommended)
-- SSH access or local terminal on the target machine
+- A machine running Ubuntu 20.04+ (24.04 recommended), Debian 11+, or macOS 12+
+  - Other Linux distributions that use apt and systemd will generally work
+  - Raspberry Pi OS 64-bit (ARM64) is supported with minor adaptations in Phase 4
+  - Windows is not supported natively — use WSL2 with Ubuntu and adapt Phase 2
+- SSH access or local terminal on the target machine (confirmed before Phase 1 begins)
 - An Anthropic API key (or other supported provider key)
 - A domain name or DDNS hostname (required for webhook-based integrations; optional for Telegram long-poll mode)
-- This kit is run from Claude Code on your local machine, operating against the target server
+- This kit is run from Claude Code on your machine, or can be followed manually via any chat interface (see Dual-runtime design below)
+
+### Dual-runtime design
+
+This kit is designed to work in two distinct execution modes:
+
+**Claude Code (tool-executing mode)**: The agent runs all terminal commands directly. The user reviews output and approves actions. This is the fastest path and was used during the kit's initial development.
+
+**Journey AI / plain chat (clipboard model)**: The agent has no terminal access. Each skill gives command blocks with explicit "run this and paste the output" instructions. The user runs the command, pastes the output into the chat, and the agent verifies before proceeding. This mode is safe to use with any chat-based AI interface.
+
+Every command block in the skill files is formatted to work in both modes. The paste-and-verify pattern is essential in clipboard mode and harmless in tool-executing mode.
+
+### Relationship to the Claude skill-creator
+
+The individual skill files (`skills/NN-name.md`) are the kind of content the Claude skill-creator produces — self-contained instructions for a specific task. The kit adds a composition layer on top of that content:
+
+- **Phase sequencing with explicit gates**: phases cannot be skipped; each completion check must pass before the next phase begins
+- **Shared artifact chain**: `deployment-brief.md` is produced in Phase 1 and consumed by every subsequent phase; each phase adapts its steps based on the flags it contains (fanless hardware, domain availability, WhatsApp path, etc.)
+- **Recovery / re-entry logic**: every skill can be re-entered after a session break or context loss; `deployment-brief.md` on disk is the persistent state
+- **Input/output contracts**: each skill declares what it requires and what it produces
+
+The skill-creator produces content; the kit adds orchestration.
 
 ### Running the kit
-Work through each skill file in order (01 → 07). Each skill produces an artifact (a file or a verified state) that the next skill consumes. Do not skip phases — each one sets up prerequisites for the next.
+
+Work through each skill file in order (Phase 0a → Phase 7). Each skill produces an artifact (a file or a verified state) that the next skill consumes. Do not skip phases — each one sets up prerequisites for the next.
 
 At the end of each phase, confirm the output artifact exists before moving on.
 
+### Kit composition chain
+
+This kit sits in the middle of a natural three-kit sequence:
+
+1. **`compute-selection-kit`** *(suggested, not yet published)* — Helps the user choose and provision the right machine (VPS, bare metal, cloud). Ends with: a machine running a compatible OS with terminal access confirmed.
+2. **`openclaw-install-kit`** *(this kit)* — Installs, integrates, hardens, and hands off a running OpenClaw instance. Starts with: a machine ready to use.
+3. **`openclaw-employee-kit`** *(see `keylimeaistudios/ai-employee-starter`)* — Turns the running OpenClaw into a structured AI employee with morning briefings and scheduled reporting.
+
+Phase 0a of this kit covers a lightweight computing selection for users who haven't yet decided what machine to use. For users who need more detailed help provisioning infrastructure (VPS setup, DNS, SSH key management), a dedicated compute-selection-kit would cover that scope.
+
 ## Steps
 
-0. **Orientation** (`skills/00-orientation.md`) — Brief the user before Phase 1 begins
+0a. **Computing Selection** (`skills/00-computing-selection.md`) — Confirm or decide what machine and OS to use
+0b. **Orientation** (`skills/00-orientation.md`) — Brief the user before Phase 1 begins
 1. **Discovery** (`skills/01-discovery.md`) — Interview the user, produce `deployment-brief.md`
 2. **Infrastructure** (`skills/02-infra.md`) — Prepare the Ubuntu machine: Node.js, firewall, thermal monitoring
 3. **OpenClaw Core** (`skills/03-openclaw-core.md`) — Install OpenClaw, configure gateway, verify daemon

@@ -1,0 +1,199 @@
+# Testing & Validation — openclaw-install-kit
+
+This document covers:
+1. Simulated A/B tests that can be run without real users or VMs (qualitative analysis)
+2. Tests requiring real infrastructure (VMs, real users) — described but not run here
+3. Suggestions for ongoing validation as the kit evolves
+
+---
+
+## Part 1 — Simulated A/B tests (run inline)
+
+### What a "vanilla skill" looks like
+
+For comparison purposes, here is a representative vanilla "install OpenClaw on Ubuntu" skill — the kind the Claude skill-creator would produce from a single-sentence prompt:
+
+```
+# Install OpenClaw on Ubuntu
+
+1. Update your system: `sudo apt update && sudo apt upgrade -y`
+2. Install Node.js 20: `curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt install -y nodejs`
+3. Install OpenClaw: `npm install -g @openclaw/gateway`
+4. Run the setup wizard: `openclaw onboard`
+5. Start the gateway: `openclaw gateway start`
+6. Configure Telegram: set your bot token when prompted
+7. Done — your assistant is running
+```
+
+This is accurate for the happy path on a fresh VPS with Node 20. It has no branching, no hardware adaptation, no security hardening, no recovery path.
+
+---
+
+### Scenario 1: Experienced sysadmin, Hetzner VPS, wants Telegram only
+
+**User profile**: Comfortable with Linux. Machine is already provisioned. Wants a quick install with no extras.
+
+| Step | Vanilla skill | This kit |
+|---|---|---|
+| Node.js version | Installs Node 20 — OpenClaw requires 22.14+ | Phase 2 installs Node 24 via nvm, verifies with `node --version` |
+| Token format | No warning — user pastes `123456789:ABCdef... @mybot` (includes username) | Skill 03 explicitly warns: copy text, not the button; paste token only, not the bot username |
+| Daemon management | `openclaw gateway start` — dies on logout | Phase 3 sets up `systemctl --user` with linger; survives reboots and logout |
+| Security | Not mentioned | Phase 5 audits firewall, file permissions, shell history, fail2ban |
+| Recovery | None | Each phase is re-enterable; `deployment-brief.md` persists state |
+
+**Outcome prediction**: Vanilla skill completes in 10 minutes on this profile. This kit takes 30 minutes. For this user, the vanilla skill works — but produces a non-hardened, non-persistent install that will silently fail on next reboot.
+
+**Kit advantage here**: Minimal for the install itself. High for long-term reliability (systemd + linger + runbook).
+
+---
+
+### Scenario 2: Non-technical user, home laptop, wants WhatsApp and Calendar
+
+**User profile**: Not comfortable with Linux terminal. Using an existing laptop (daily driver). Wants WhatsApp and Google Calendar.
+
+| Step | Vanilla skill | This kit |
+|---|---|---|
+| Hardware check | None — no lid-suspend warning | Phase 0a asks; Phase 3 configures no-suspend-on-lid-close |
+| WhatsApp path | No distinction — implies Meta API | Phase 1 asks: personal number or business number? Routes to correct path in Phase 4 |
+| Meta API approval | Not mentioned | Phase 4 warns: 1–3 day approval wait if Meta API path; recommends personal number for immediate use |
+| QR code pairing | Not covered | Phase 4 covers whatsapp-web.js QR scan, device linking, group gating configuration |
+| Google Calendar | "Enable Google Calendar API" — no OAuth detail | Phase 4 covers GCP project creation, credentials.json placement, `openclaw auth google` flow, token permissions |
+| WhatsApp stops responding | No recovery path | Phase 4 covers dmPolicy, group allowlist, self-chat JID configuration |
+| Session persistence | Not covered | Phase 3 explains linger; Phase 7 runbook covers `systemctl --user restart openclaw-gateway` |
+
+**Outcome prediction**: Vanilla skill fails at WhatsApp for this user — wrong path assumed, no QR code guidance, no group policy explanation. Calendar setup leaves the user lost at "enable APIs." This user needs the kit.
+
+**Kit advantage here**: High. The branching logic (personal vs business WhatsApp), the group gating discovery, and the OAuth flow walkthrough are exactly what this profile needs.
+
+---
+
+### Scenario 3: Developer, fanless NUC, multiple integrations, 24/7 uptime
+
+**User profile**: Technical. Bare metal NUC, fanless, always on. Wants Telegram + WhatsApp + GitHub + local disk.
+
+| Step | Vanilla skill | This kit |
+|---|---|---|
+| Thermal monitoring | Not mentioned | Phase 2 installs lm-sensors, runs `sensors-detect`, checks idle temp before proceeding |
+| Stress test | Not mentioned | Phase 5 runs `stress-ng` load test, records peak temp, optionally throttles `gateway.max_concurrent_tasks` |
+| Multi-integration order | All at once | Phase 4 sequences: Telegram first (simplest, verifiable), then WhatsApp, then others |
+| GitHub token scopes | Not specified | Phase 4 specifies exact scopes: `repo`, `read:user`, `read:org` |
+| Local disk scope | Not specified | Phase 4 configures `filesystem.allowed_paths "~"` and verifies boundary |
+| Runbook | None | Phase 7 produces `runbook.md` covering restart, backup, update, monitoring |
+| Phase recovery | None | Each phase is idempotent; re-entry documented in each skill header |
+
+**Outcome prediction**: Vanilla skill gets this user to a working install. But no thermal safety, no sequencing (integration failures compound), no runbook. The developer will figure it out — but the kit saves 2–3 hours of debugging.
+
+**Kit advantage here**: Medium-high. Thermal monitoring and the integration sequencing are the biggest wins for this profile.
+
+---
+
+### Summary of simulated results
+
+| User profile | Vanilla skill success | Kit advantage |
+|---|---|---|
+| Expert, VPS, Telegram only | Yes, with caveats (systemd, security) | Low for install; high for reliability |
+| Non-technical, laptop, WhatsApp + Calendar | No — fails at WhatsApp path and OAuth | High — branching logic and recovery are critical |
+| Developer, fanless NUC, multi-integration | Yes, with manual debugging | Medium — thermal safety and sequencing save time |
+
+**Conclusion**: The kit's value scales with user complexity and hardware specificity. For an expert on a fresh VPS wanting only Telegram, the kit adds overhead. For a non-technical user with specific hardware and multiple integrations, the kit is the difference between success and abandonment.
+
+---
+
+## Part 2 — Tests requiring real infrastructure
+
+These tests cannot be simulated. They are described here for future validation.
+
+### Test A: Kit completion rate vs vanilla skill (real users)
+
+**Method**: Recruit 10 users per condition. Condition A uses this kit. Condition B uses a vanilla "install OpenClaw" skill generated by Claude skill-creator.
+
+**Metrics**:
+- Primary: % reaching a working bot on at least one channel
+- Secondary: Time to Phase 7 (kit) or equivalent completion (vanilla)
+- Error count: how many phases required a retry or support question
+
+**Minimum sample**: 10 per condition for directional signal; 30+ for statistical significance.
+
+---
+
+### Test B: Kit vs kit-without-orientation (Phase 0a impact)
+
+**Method**: Two variants of this kit — one starting at Phase 0a (computing selection + orientation), one starting at Phase 1 (discovery).
+
+**Metric**: Abandonment rate before Phase 2 completes. Hypothesis: orientation reduces abandonment by setting correct expectations about the manual paste-and-verify model.
+
+---
+
+### Test C: With vs without deployment-brief (shared artifact chain)
+
+**Method**: Variant of the kit where phases don't read `deployment-brief.md` — the agent asks questions inline at each phase instead.
+
+**Metric**: Number of contradictory decisions across phases (e.g., SSL set up in Phase 2 but domain is "none"), number of questions repeated across phases.
+
+This tests whether the shared artifact chain actually reduces errors and repetition or just adds overhead.
+
+---
+
+### Test D: Kit correctness across OS variants (automated)
+
+**Method**: Provision VMs for each supported OS (Ubuntu 24.04, Ubuntu 22.04, Debian 12, macOS 14). Run the kit against each. Claude Code executes commands directly.
+
+**Metrics**:
+- Which phases produce errors on non-Ubuntu systems?
+- Does Phase 2 fail on macOS (apt commands)?
+- Does Phase 4 cloudflared install fail on ARM64?
+
+**Automation level**: High — Claude Code + fresh VMs. Most of this can be scripted except OAuth flows and WhatsApp QR pairing.
+
+---
+
+### Test E: Recovery after /compact (context loss)
+
+**Method**: Run the kit to Phase 4. Run `/compact`. Attempt to resume. Measure whether `deployment-brief.md` is sufficient for the agent to correctly identify the current state and resume.
+
+**Metric**: Did the agent correctly identify which phase was complete and which integrations were working, using only `deployment-brief.md` + a verification command?
+
+This directly tests the file-as-state-persistence design.
+
+---
+
+### Test F: WhatsApp path selection accuracy (discovery)
+
+**Method**: Present Phase 1 discovery to 10 users. Measure: how many chose the correct WhatsApp path (personal vs business) for their actual use case? How many needed to switch paths in Phase 4?
+
+**Hypothesis**: The two-path question in Phase 1 reduces WhatsApp Phase 4 failures compared to a kit that defaults to one path.
+
+---
+
+## Part 3 — Ongoing validation as kit evolves
+
+As new OS variants, hardware profiles, and OpenClaw versions are tested, update this document with:
+
+- Date tested
+- OS version + hardware profile
+- Phase where first error was encountered
+- Resolution applied
+- Whether skill files were updated as a result
+
+Template:
+```
+## Test run: YYYY-MM-DD
+- OS: Ubuntu 24.04 / Debian 12 / macOS 14 / other
+- Hardware: VPS / bare metal / fanless / ARM64
+- Phase 1–3: pass / fail (note)
+- Phase 4: integrations tested: [list]
+- Phase 5: security check result
+- Phase 6–7: pass / fail
+- Kit updates made: [list skill files updated]
+```
+
+---
+
+## Known gaps not yet tested
+
+- Debian 12 (apt + ufw should work identically, not yet verified)
+- macOS — Phase 2 needs Homebrew adaptation documented
+- ARM64 (Raspberry Pi 4) — cloudflared binary URL needs verification
+- Multi-user pairing flow — tested for single user only
+- Google Calendar OAuth — tested with one GCP account; edge cases with org-managed accounts untested
+- WhatsApp business API path (Path B) — not tested; only personal number (Path A) has been verified
