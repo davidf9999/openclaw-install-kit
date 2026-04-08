@@ -56,33 +56,21 @@ The platform has no FSM runtime. But the kit's contract-first, explicit-transiti
 
 ---
 
-## Gap 1 — No orientation before Phase 1
+## ~~Gap 1~~ RESOLVED — Orientation before Phase 1
 
-The current kit drops the user directly into the discovery interview. A new user has no idea:
-- What OpenClaw is or what they'll end up with
-- How long the install takes
-- What they need to have ready
-- That they will be running commands manually throughout
-
-**Recommendation**: Add a `skills/00-orientation.md` that the agent delivers before asking any questions:
-
-> "This kit installs OpenClaw on your Ubuntu machine and connects it to your messaging platforms. It has 7 phases and takes 30–60 minutes of active work. You will run all terminal commands yourself — I'll give you each block, explain what it does, and read back the output you paste. Before we start, have ready: terminal access to your Ubuntu machine, and an Anthropic API key."
+`skills/00-orientation.md` (Phase 0b) now exists. It briefs the user on what OpenClaw is, how long the install takes, what they need, and that they are running all commands manually. Delivered before Phase 1.
 
 ---
 
-## Gap 2 — The sudo / terminal handoff is undocumented
+## ~~Gap 2~~ RESOLVED — Terminal handoff documented
 
-The kit never tells the user they are the ones running commands. This is structural — Journey AI has no shell access. It must be set as an expectation upfront (orientation) and reinforced at the top of each infra skill.
+The orientation skill explicitly tells the user they run all commands and paste output back. The infra skills reinforce this with "You will run all commands yourself" in each phase header.
 
 ---
 
-## Gap 3 — WhatsApp complexity not flagged in discovery
+## ~~Gap 3~~ RESOLVED — WhatsApp two-path question in discovery
 
-Skill 01 lists WhatsApp alongside Telegram with no complexity warning. WhatsApp requires either Meta Business API approval (1–3 days) or a persistent browser bridge (`whatsapp-web.js`).
-
-**Recommendation**: Add callout in skill 01 next to WhatsApp:
-
-> "Requires Meta Business API approval (1–3 days) or a third-party bridge. Start with Telegram if you want something working today."
+Skill 01 now asks which WhatsApp path: personal number (whatsapp-web.js bridge) or separate/business number (Meta Business API). Skill 04 routes to Path A or Path B accordingly, with complexity warnings on each.
 
 ---
 

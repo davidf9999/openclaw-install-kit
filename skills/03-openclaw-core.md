@@ -5,7 +5,7 @@
 **Input**: `deployment-brief.md`, verified infra from skill 02  
 **Output**: Running OpenClaw user systemd service, verified responsive, dashboard accessible
 
-> **Phase 3 of 7 — OpenClaw Core Install**  
+> **Phase 3 of 8 — OpenClaw Core Install**  
 > Re-read `deployment-brief.md` before starting.  
 > You will run all commands yourself in your terminal. Paste each output back here so I can verify before moving to the next step.  
 > If you are re-entering this phase, say "resuming Phase 3" and paste `systemctl --user status openclaw-gateway`.

@@ -5,7 +5,7 @@
 **Input**: Conversation with user  
 **Output**: `deployment-brief.md` in the working directory
 
-> **Phase 1 of 7 — Discovery**  
+> **Phase 1 of 8 — Discovery**  
 > This phase is entirely conversational — no terminal commands. Ask questions, collect answers, write the brief.  
 > If you are re-entering this phase, ask the user to confirm whether `deployment-brief.md` already exists before asking questions again.
 

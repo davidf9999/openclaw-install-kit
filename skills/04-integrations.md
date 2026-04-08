@@ -5,7 +5,7 @@
 **Input**: `deployment-brief.md`, running OpenClaw daemon (from skill 03)  
 **Output**: Each chosen platform verified as sending/receiving messages through OpenClaw
 
-> **Phase 4 of 7 — Integrations**  
+> **Phase 4 of 8 — Integrations**  
 > Re-read `deployment-brief.md` before starting. Only set up platforms listed there — do not prompt the user to add more.  
 > You will run all commands yourself. Paste each output back here so I can verify before we continue.  
 > If you are re-entering this phase, say "resuming Phase 4" and tell me which integrations are already working.

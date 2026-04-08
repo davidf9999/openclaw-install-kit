@@ -5,7 +5,7 @@
 **Input**: Running OpenClaw with integrations (from skill 04)  
 **Output**: Completed security checklist, all findings resolved or explicitly accepted
 
-> **Phase 5 of 7 — Security Hardening**  
+> **Phase 5 of 8 — Security Hardening**  
 > Re-read `deployment-brief.md` before starting. Adapt steps based on whether the machine is internet-facing.  
 > Run each command, paste the output, and I will tell you what to fix before we continue.  
 > If you are re-entering this phase, say "resuming Phase 5."
@@ -82,15 +82,16 @@ Paste the output. Secrets should not appear here. If they do, move them to `.env
 
 ## Step 3 — File permissions
 
+OpenClaw config lives in `~/.openclaw/` (with the dot — distinct from `~/openclaw/` which is your working directory).
+
 ```bash
-chmod 600 ~/openclaw/.env
-chmod 600 ~/openclaw/credentials.json 2>/dev/null || true
-chmod 600 ~/openclaw/token.json 2>/dev/null || true
-chmod 700 ~/openclaw
-ls -la ~/openclaw/
+chmod 600 ~/.openclaw/credentials.json 2>/dev/null || true
+chmod 600 ~/.openclaw/token.json 2>/dev/null || true
+chmod 700 ~/.openclaw
+ls -la ~/.openclaw/
 ```
 
-Paste the `ls -la` output.
+Paste the `ls -la` output. `openclaw.json` should show `600`, the directory `700`. `credentials.json` and `token.json` appear only if Google integration was configured.
 
 ---
 
@@ -182,7 +183,7 @@ Record the peak temperature observed.
 Confirm each item and paste any outstanding command output:
 
 - [ ] Firewall: only necessary ports open — paste `sudo ufw status verbose`
-- [ ] `.env` permissions: 600 — paste `stat ~/openclaw/.env`
+- [ ] `~/.openclaw/openclaw.json` permissions: 600 — paste `stat ~/.openclaw/openclaw.json`
 - [ ] No secrets in bash history — paste grep output
 - [ ] No secrets in systemd env — paste `sudo systemctl show openclaw | grep -i env`
 - [ ] `credentials.json` / `token.json` permissions: 600 (if applicable)

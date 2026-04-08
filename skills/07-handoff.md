@@ -5,7 +5,7 @@
 **Input**: Completed installation (skills 01–06), `deployment-brief.md`  
 **Output**: `~/openclaw/runbook.md`, final verification, summary of what was installed
 
-> **Phase 7 of 7 — Handoff**  
+> **Phase 7 of 8 — Handoff**  
 > Re-read `deployment-brief.md` and review what was installed across phases 02–06 before generating the runbook.  
 > This phase is mostly written output — minimal commands. Paste any command output back here.  
 > If you are re-entering this phase, say "resuming Phase 7."

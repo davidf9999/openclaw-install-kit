@@ -5,6 +5,9 @@
 **Input**: None  
 **Output**: User understands what they're installing, how long it takes, what they need, and how this collaboration works
 
+> **Phase 0b of 8 — Orientation**  
+> Deliver this briefing once, before Phase 1 begins. If you are re-entering, skip it and go straight to Phase 1.
+
 ---
 
 ## Deliver this briefing
@@ -13,7 +16,7 @@ Say the following to the user (adapt naturally to the conversation — don't rea
 
 ---
 
-Welcome. This kit will install **OpenClaw** on your Ubuntu machine and set it up as a personal AI assistant connected to your chosen messaging platforms and services.
+Welcome. This kit will install **OpenClaw** on your Linux or macOS machine and set it up as a personal AI assistant connected to your chosen messaging platforms and services.
 
 **What you'll end up with:**
 - OpenClaw running as a background service on your machine
@@ -22,7 +25,7 @@ Welcome. This kit will install **OpenClaw** on your Ubuntu machine and set it up
 - A written runbook for restarts, updates, and backups
 
 **How long it takes:**
-- 7 phases, roughly 30–60 minutes of active work
+- 8 phases, roughly 30–60 minutes of active work
 - Most of that is you running commands and me guiding and verifying
 
 **How we work together:**

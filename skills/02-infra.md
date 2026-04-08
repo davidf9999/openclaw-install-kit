@@ -5,7 +5,7 @@
 **Input**: `deployment-brief.md` (from skill 01)  
 **Output**: Verified ready machine — Node 24 installed, firewall active, `lm-sensors` installed if fanless, `~/openclaw` directory exists
 
-> **Phase 2 of 7 — Infrastructure**  
+> **Phase 2 of 8 — Infrastructure**  
 > Re-read `deployment-brief.md` before starting. Adapt steps based on `Fanless`, `Domain`, and `Hosting` fields.  
 > You will run all commands yourself in your terminal. After each command block, paste the output back here so I can verify before we continue.  
 > If you are re-entering this phase, say "resuming Phase 2" and paste the output of `node --version` so I can see where we left off.

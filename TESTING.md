@@ -18,7 +18,7 @@ For comparison purposes, here is a representative vanilla "install OpenClaw on U
 
 1. Update your system: `sudo apt update && sudo apt upgrade -y`
 2. Install Node.js 20: `curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt install -y nodejs`
-3. Install OpenClaw: `npm install -g @openclaw/gateway`
+3. Install OpenClaw: `npm install -g openclaw`
 4. Run the setup wizard: `openclaw onboard`
 5. Start the gateway: `openclaw gateway start`
 6. Configure Telegram: set your bot token when prompted

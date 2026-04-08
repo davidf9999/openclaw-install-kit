@@ -5,7 +5,7 @@
 **Input**: `deployment-brief.md` (use cases section), running hardened OpenClaw  
 **Output**: Configured assistant persona, installed skills, documented workflow patterns
 
-> **Phase 6 of 7 — Optimization**  
+> **Phase 6 of 8 — Optimization**  
 > Re-read the `Use Cases` section of `deployment-brief.md` carefully before doing anything. Everything here is driven by what the user actually wants — do not install skills or configure workflows that aren't relevant to their stated use cases.  
 > This phase is mostly conversational and file editing. Paste any command output back here.  
 > If you are re-entering this phase, say "resuming Phase 6" and describe what's already configured.
@@ -100,7 +100,7 @@ Read `~/.openclaw/workspace/SOUL.md` with the user. The defaults are good — on
 The bootstrap file drives the "blank slate" first-run experience. Once identity is configured, delete it:
 
 ```bash
-rm ~/.openclaw/workspace/BOOTSTRAP.md
+rm -f ~/.openclaw/workspace/BOOTSTRAP.md
 ```
 
 ---
