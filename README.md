@@ -42,9 +42,10 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 
 ## Requirements
 
-- A machine running Ubuntu 20.04+ (24.04 recommended), Debian 11+, or macOS 12+
-  - Raspberry Pi OS 64-bit (ARM64) works with minor adaptations
-  - Windows is not supported natively — use WSL2
+- A machine running **Ubuntu 20.04+ (24.04 recommended)** or Debian 11+ — fully supported and tested
+  - Raspberry Pi OS 64-bit (ARM64): supported with minor adaptations (not yet validated)
+  - macOS 12+: Phase 2 commands require Homebrew substitutions; not guided step-by-step and not yet validated — see Phase 2 notes
+  - Windows: not supported natively — use WSL2
   - Not sure what machine to use? Phase 0a (Computing Selection) helps you decide
 - Terminal or SSH access to the target machine
 - An API key from a supported LLM provider (Anthropic recommended)

@@ -1,9 +1,73 @@
 # Testing & Validation — openclaw-install-kit
 
-This document covers:
-1. Simulated A/B tests that can be run without real users or VMs (qualitative analysis)
-2. Tests requiring real infrastructure (VMs, real users) — described but not run here
-3. Suggestions for ongoing validation as the kit evolves
+## What has been tested (as of v0.1.0)
+
+| What | Status |
+|---|---|
+| Full end-to-end install, all 8 phases | ✅ Completed once — Ubuntu 24.04 / ASUS ZenBook UX305FA / Intel Core M / fanless / x86_64 |
+| Telegram integration | ✅ Verified working |
+| WhatsApp Path A (personal number, whatsapp-web.js) | ✅ Verified working (including group gating, dmPolicy, Cloudflare named tunnel) |
+| Cloudflare named tunnel | ✅ Verified working |
+| WhatsApp Path B (Meta Business API) | ❌ Not tested — instructions based on Meta documentation only |
+| Slack, Email, Discord, Signal | ❌ Not tested |
+| Google Calendar / Contacts | ❌ Not tested |
+| GitHub integration | ❌ Not tested |
+| Local disk integration | ❌ Not tested |
+| Debian 11/12 | ❌ Not tested |
+| macOS 12+ | ❌ Not tested — Phase 2 requires Homebrew adaptation not in this kit |
+| Raspberry Pi / ARM64 | ❌ Not tested |
+| VPS (DigitalOcean, Hetzner, etc.) | ❌ Not tested |
+| Recovery after /compact (context loss) | ❌ Not tested in a real session |
+| Journey AI clipboard mode | ❌ Not tested — kit developed in Claude Code tool-executing mode |
+
+**The kit has been validated on exactly one machine configuration.** Everything else is based on documentation review, structural analysis, or inference from the Ubuntu path.
+
+---
+
+This document also covers:
+1. Skill-creator A/B test design (Part 0)
+2. Simulated A/B tests — qualitative analysis without real users or VMs (Part 1)
+3. Tests requiring real infrastructure (Part 2)
+4. Ongoing validation log (Part 3)
+
+---
+
+## Part 0 — Skill-creator A/B test design
+
+The Claude skill-creator can generate a "vanilla" install skill from a single prompt. Using that as the control condition for comparison is more rigorous than an imagined baseline. Here is how this can be run, and what parts can be automated.
+
+### How to run the skill-creator A/B test
+
+**Step 1 — Generate the vanilla skill (manual, ~2 minutes)**
+
+Open Claude and prompt the skill-creator:
+> "Create a skill that installs OpenClaw on Ubuntu, connects it to Telegram, and starts it as a background service."
+
+Save the output as `TESTING-vanilla-skill.md` (gitignored — it's a test artifact).
+
+**Step 2 — Compare against this kit for a given user profile (automatable)**
+
+For each user profile in Part 1, the comparison can be run by prompting Claude:
+> "I have two install guides for OpenClaw. Read both. Then walk through what would happen if [user profile description] followed each guide. For each guide, note: which steps would fail, what decisions would be made incorrectly, and what would be missing at the end."
+
+Provide both `TESTING-vanilla-skill.md` and the relevant skills from this kit. Claude can produce a structured comparison without any real machine.
+
+**Step 3 — Record findings in Part 3 (manual)**
+
+Add a row to the test log with date, profiles tested, and key differences found.
+
+### What can be automated vs what can't
+
+| Comparison step | Automatable? | How |
+|---|---|---|
+| Generate vanilla skill | Yes | Single skill-creator prompt, save output |
+| Structural diff (phases, gates, artifacts) | Yes | Claude prompt comparing both documents |
+| User profile walkthrough | Yes (qualitative) | Claude prompt simulating each profile |
+| Completion rate | No | Requires real users |
+| Time to completion | No | Requires real users |
+| Error rate | No | Requires real infrastructure |
+
+The qualitative simulation in Part 1 below was written by hand. Using the skill-creator to generate the actual B-condition would make it more reproducible — someone running this test six months from now would get a current skill-creator output rather than this kit's author's memory of what one looks like.
 
 ---
 

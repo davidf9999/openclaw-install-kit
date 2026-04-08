@@ -42,7 +42,9 @@ Telegram is configured during onboard (skill 03). If you completed QuickStart on
    - ⚠️ Paste ONLY the token (e.g. `123456789:ABCdef...`) — not the bot username
 
 ```bash
-openclaw config set channels.telegram.botToken <paste-token-here>
+read -rsp $'Paste bot token (input hidden, press Enter):\n' TG_TOKEN && printf '\n'
+openclaw config set channels.telegram.botToken "$TG_TOKEN"
+unset TG_TOKEN && history -c && history -w
 systemctl --user restart openclaw-gateway
 ```
 
@@ -139,8 +141,11 @@ If any of these are not in place, stop here — the integration will not work un
 
 ```bash
 openclaw config set whatsapp.phone_number_id <id>
-openclaw config set whatsapp.access_token <token>
-openclaw config set whatsapp.webhook_verify_token <random-string-you-choose>
+read -rsp $'Paste Access Token (input hidden, press Enter):\n' WA_TOKEN && printf '\n'
+openclaw config set whatsapp.access_token "$WA_TOKEN"
+read -rsp $'Choose a webhook verify token (input hidden, press Enter):\n' WA_VERIFY && printf '\n'
+openclaw config set whatsapp.webhook_verify_token "$WA_VERIFY"
+unset WA_TOKEN WA_VERIFY && history -c && history -w
 systemctl --user restart openclaw-gateway
 ```
 
@@ -161,8 +166,11 @@ cat /tmp/openclaw/openclaw-$(date +%Y-%m-%d).log | tail -30
 4. Install to workspace → get **Bot Token** (`xoxb-...`) and **App-Level Token** (`xapp-...`)
 
 ```bash
-openclaw config set slack.bot_token <xoxb-...>
-openclaw config set slack.app_token <xapp-...>
+read -rsp $'Paste Bot Token (xoxb-..., input hidden):\n' SLACK_BOT && printf '\n'
+openclaw config set slack.bot_token "$SLACK_BOT"
+read -rsp $'Paste App Token (xapp-..., input hidden):\n' SLACK_APP && printf '\n'
+openclaw config set slack.app_token "$SLACK_APP"
+unset SLACK_BOT SLACK_APP && history -c && history -w
 systemctl --user restart openclaw-gateway
 ```
 
@@ -180,7 +188,9 @@ openclaw config set email.imap_port 993
 openclaw config set email.smtp_host <host>
 openclaw config set email.smtp_port 587
 openclaw config set email.username <your-address>
-openclaw config set email.password <app-password>
+read -rsp $'Paste app password (input hidden, press Enter):\n' EMAIL_PASS && printf '\n'
+openclaw config set email.password "$EMAIL_PASS"
+unset EMAIL_PASS && history -c && history -w
 systemctl --user restart openclaw-gateway
 ```
 
@@ -221,7 +231,9 @@ Test via the dashboard or Telegram:
 2. Generate a token with scopes: `repo`, `read:user`, `read:org`
 
 ```bash
-openclaw config set github.token <your-token>
+read -rsp $'Paste GitHub token (input hidden, press Enter):\n' GH_TOKEN && printf '\n'
+openclaw config set github.token "$GH_TOKEN"
+unset GH_TOKEN && history -c && history -w
 systemctl --user restart openclaw-gateway
 ```
 

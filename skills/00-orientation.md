@@ -32,7 +32,8 @@ Welcome. This kit will install **OpenClaw** on your Linux or macOS machine and s
 - I will give you command blocks to run in your terminal
 - You run them and paste the output back here
 - I read the output, confirm everything looks right, and give you the next step
-- I cannot run commands on your machine directly — you are always in control
+- If you are using **Claude Code**: I can run commands directly on your machine — you will see each one and can approve or deny it
+- If you are using **Journey AI or a plain chat interface**: you run all commands yourself and paste the output back — I have no direct access to your terminal
 
 **Before we start, make sure you have:**
 - [ ] A terminal open on the Ubuntu machine (local or SSH)

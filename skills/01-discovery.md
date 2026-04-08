@@ -90,6 +90,7 @@ Generated: <date>
 ## Messaging Platforms
 - Primary: <platform>
 - Additional: <list>
+- WhatsApp path: <personal number — Path A | business number — Path B | none>
 
 ## Integrations
 - Google Workspace: <yes/no — which services>

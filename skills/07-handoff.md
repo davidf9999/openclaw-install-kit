@@ -109,7 +109,7 @@ Baseline: <idle temp>°C idle, <peak temp>°C under load. Critical: 95°C.
 If consistently above 80°C under sustained load:
 ```bash
 export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
-openclaw config set gateway.maxConcurrent 2
+openclaw config set gateway.max_concurrent_tasks 2
 systemctl --user restart openclaw-gateway
 ```
 

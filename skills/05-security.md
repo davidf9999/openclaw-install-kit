@@ -73,10 +73,10 @@ history -c && history -w
 
 Check no secrets are in the systemd service environment:
 ```bash
-sudo systemctl show openclaw | grep -i env
+systemctl --user show openclaw-gateway | grep -i env
 ```
 
-Paste the output. Secrets should not appear here. If they do, move them to `.env` and update OpenClaw config to read from file.
+Paste the output. Secrets should not appear here. If they do, they were passed as CLI arguments or environment variables at startup — remove them from the service unit and ensure all secrets are stored only in `~/.openclaw/openclaw.json`.
 
 ---
 
@@ -170,8 +170,9 @@ sensors
 
 If temps exceeded 85°C under load, configure OpenClaw to limit concurrent tasks:
 ```bash
+export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
 openclaw config set gateway.max_concurrent_tasks 2
-sudo systemctl restart openclaw
+systemctl --user restart openclaw-gateway
 ```
 
 Record the peak temperature observed.
@@ -185,7 +186,7 @@ Confirm each item and paste any outstanding command output:
 - [ ] Firewall: only necessary ports open — paste `sudo ufw status verbose`
 - [ ] `~/.openclaw/openclaw.json` permissions: 600 — paste `stat ~/.openclaw/openclaw.json`
 - [ ] No secrets in bash history — paste grep output
-- [ ] No secrets in systemd env — paste `sudo systemctl show openclaw | grep -i env`
+- [ ] No secrets in systemd env — paste `systemctl --user show openclaw-gateway | grep -i env`
 - [ ] `credentials.json` / `token.json` permissions: 600 (if applicable)
 - [ ] Fail2ban active (internet-facing only)
 - [ ] SSH hardened (internet-facing only)

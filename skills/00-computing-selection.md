@@ -22,10 +22,15 @@ Ask only the questions needed to reach a clear decision. If the user already has
 If yes, ask them to run the following and paste the output:
 
 ```bash
+# Linux / Ubuntu / Debian:
 uname -a && free -h && df -h /
+# macOS (free does not exist on macOS):
+uname -a && sysctl hw.memsize | awk '{printf "RAM: %.1f GB\n", $2/1073741824}' && df -h /
 ```
 
 Confirm: Linux or macOS, 2 GB+ RAM, 10 GB+ free disk, internet access. If it passes, skip to the Completion check.
+
+> **macOS note**: Phase 2 (Infrastructure) is written for Ubuntu/Debian — it uses `apt`, `ufw`, and `certbot`. macOS users will need to adapt those commands using Homebrew, and `ufw` does not apply. The adaptation is not guided step-by-step in this kit. If you want a fully tested, zero-adaptation path, use Ubuntu 24.04 on a VPS or spare machine.
 
 ---
 

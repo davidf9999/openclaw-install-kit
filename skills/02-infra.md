@@ -14,6 +14,14 @@
 
 ## Instructions
 
+> **macOS users**: This phase uses `apt`, `ufw`, and `certbot` — Linux/Debian-specific tools. If you are on macOS, you will need to substitute:
+> - `apt install` → `brew install` (Homebrew)
+> - `ufw` → macOS has no ufw; use the built-in firewall (`System Settings → Network → Firewall`) or skip for local use
+> - `certbot` → use `brew install certbot` or a Caddy/nginx reverse proxy
+> - `lm-sensors` → not available; use `sudo powermetrics --samplers smc` for thermal readings
+>
+> macOS adaptation is not guided step-by-step in this kit. If you hit issues, open an issue with your OS and hardware.
+
 Read `deployment-brief.md` before starting. Adapt steps based on:
 - `Fanless: yes` → install and configure `lm-sensors`, check idle temps before continuing
 - `Domain: none` → skip SSL/certbot entirely; Telegram long-poll mode does not need it
