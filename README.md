@@ -1,6 +1,9 @@
 # openclaw-install-kit
 
-A [Journey kit](https://www.journeykits.ai) for installing, integrating, hardening, and handing off a self-hosted [OpenClaw](https://openclaw.ai) instance on Ubuntu — using cloud LLM APIs (no local GPU required).
+A [Journey kit](https://www.journeykits.ai) for installing, integrating, hardening, and handing off a self-hosted [OpenClaw](https://openclaw.ai) instance on Ubuntu — using **cloud LLM APIs (Anthropic, OpenAI, etc.)**.
+
+> **No GPU. No local model. No Ollama.**  
+> This kit connects OpenClaw to a cloud LLM provider. If you want to run a local model (Llama, Mistral, Ollama, etc.) instead of a cloud API, this kit is not what you need — see the [OpenClaw local LLM docs](https://docs.openclaw.ai) for that path.
 
 Eight guided phases (including orientation). The agent guides you step by step — you run commands in your terminal, paste the output back, and the agent verifies before moving on. Produces a written runbook at the end.
 
@@ -14,6 +17,7 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 |---|---|---|---|
 | Bare metal / laptop | ✓ | — | — |
 | VPS (DO/Hetzner/AWS) | ✓ | ✓ | ✓ (AWS only) |
+| Cloud LLM only (no local model) | ✓ | ✓ | ✓ |
 | Discovery phase | ✓ | — | — |
 | All messaging platforms | ✓ | partial | — |
 | Security hardening | ✓ | basic | — |

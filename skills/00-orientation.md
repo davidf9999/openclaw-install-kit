@@ -24,6 +24,9 @@ Welcome. This kit will install **OpenClaw** on your Linux or macOS machine and s
 - Integrated with whatever services you choose: calendar, GitHub, WhatsApp, local files, etc.
 - A written runbook for restarts, updates, and backups
 
+**Important — this kit uses cloud LLM APIs only:**  
+OpenClaw will call a cloud provider (Anthropic, OpenAI, etc.) for every response. You will need an API key and will pay per-token usage fees. **Local models (Ollama, Llama, Mistral, etc.) are not covered by this kit.** If that's what you want, stop here and see the OpenClaw local LLM documentation instead.
+
 **How long it takes:**
 - 8 phases, roughly 30–60 minutes of active work
 - Most of that is you running commands and me guiding and verifying
