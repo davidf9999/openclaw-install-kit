@@ -56,7 +56,7 @@ outputs:
   - name: deployment_brief
     description: deployment-brief.md capturing all decisions made during install
 environment:
-  os: linux
+  os: linux-macos
   platforms:
     - claude-code
     - journey-ai
@@ -206,6 +206,6 @@ Phase 0a of this kit covers a lightweight computing selection for users who have
 
 - Never log or echo API keys to stdout during setup steps.
 - The `openclaw onboard` command prompts interactively for keys — do not pass them as CLI arguments (they appear in shell history).
-- After install, restrict `.env` file permissions: `chmod 600 .env`.
+- After install, verify config file permissions: `chmod 600 ~/.openclaw/openclaw.json && chmod 700 ~/.openclaw`.
 - Review all webhook endpoints for public exposure before enabling integrations.
 - Run the security skill (05) before exposing any integration to the internet.

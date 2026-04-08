@@ -170,7 +170,7 @@ systemctl --user restart openclaw-gateway
 | Bot responds but ignores commands | Check if pairing approved: `openclaw pairing list` |
 | nvm / openclaw not found | Run `export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"` first |
 | Google integration fails | `token.json` expired — delete `~/.openclaw/token.json`, re-run `openclaw auth google` |
-| High CPU/temp | `sensors`, reduce `gateway.maxConcurrent` |
+| High CPU/temp | `sensors`, reduce `gateway.max_concurrent_tasks` |
 
 ---
 
