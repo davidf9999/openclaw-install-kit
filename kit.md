@@ -2,7 +2,7 @@
 schema: "kit/1.0"
 slug: "openclaw-install"
 title: "OpenClaw Installation & Setup"
-summary: "Guide an AI agent through installing, integrating, hardening, and handing off a self-hosted OpenClaw instance — from bare metal to production-ready."
+summary: "Beta kit for installing, integrating, hardening, and handing off a self-hosted OpenClaw instance on a validated Ubuntu path."
 version: "0.1.0"
 owner: "dfront"
 license: "MIT"
@@ -68,9 +68,9 @@ environment:
     runs them manually in their terminal, pastes output back, and the agent verifies before
     continuing. Every command block in the skill files is formatted for this paste-and-verify
     pattern — it is harmless in Claude Code and essential in Journey AI.
-    Tested on Ubuntu 22.04+ and 24.04 on bare metal and VPS.
-    Also supported with adaptations: Debian 11/12 (identical apt/ufw), macOS 12+ (Homebrew
-    substitutions in Phase 2), Raspberry Pi OS 64-bit (ARM64 cloudflared binary).
+    Validated so far on Ubuntu 24.04.4 LTS on ASUS ZenBook UX305FA hardware in Claude Code.
+    Debian 11/12, macOS 12+, Raspberry Pi OS 64-bit (ARM64), VPS deployments, and Journey AI
+    clipboard mode are documented but not yet validated end to end.
     Fanless/low-power hardware (e.g. Intel Core M) is supported with thermal monitoring notes.
 selfContained: true
 fileManifest:
@@ -119,11 +119,11 @@ failures:
 
 ## Goal
 
-Install, configure, integrate, harden, and hand off a fully operational self-hosted OpenClaw instance on an Ubuntu machine — without a local LLM. By the end of this kit the agent (or human) running it will have a verified OpenClaw daemon connected to at least one messaging platform, a security-hardened environment, and a written runbook for ongoing maintenance.
+Install, configure, integrate, harden, and hand off a self-hosted OpenClaw instance on a validated Ubuntu path — without a local LLM. By the end of this kit the agent (or human) running it will have a verified OpenClaw daemon connected to at least one messaging platform, a security-hardened environment, and a written runbook for ongoing maintenance.
 
 ## When to Use
 
-- You want to self-host OpenClaw on a Linux machine (bare metal, VPS, or cloud instance)
+- You want to self-host OpenClaw on a Linux machine and are comfortable starting from the tested Ubuntu path
 - You are using cloud LLM APIs (Anthropic, OpenAI, etc.) — no local GPU required
 - You want a structured, phase-by-phase installation that produces documentation as it goes
 - You are running this kit from Claude Code (before OpenClaw is installed)
@@ -132,6 +132,26 @@ Not suitable for:
 - Local LLM / Ollama setups (different resource requirements — see openclaw docs)
 - Windows native installs (use WSL2 + adapt infra phase)
 - Managed/hosted OpenClaw offerings
+
+## Release Status
+
+This kit should currently be presented as a beta.
+
+Known supported path:
+- Ubuntu 24.04.4 LTS
+- x86_64 laptop or desktop hardware
+- Claude Code execution mode
+- Telegram integration
+- WhatsApp Path A (personal number via `whatsapp-web.js`) when needed
+
+Documented but not yet validated:
+- VPS deployments
+- Debian
+- macOS
+- Raspberry Pi / ARM64
+- Journey AI clipboard mode
+- WhatsApp Path B
+- Slack, Email, Google, GitHub, and local disk integrations
 
 **Expert fast path**: If you already have a completed `deployment-brief.md` (from a prior install or written manually), skip Phase 1 and go straight to Phase 2.
 

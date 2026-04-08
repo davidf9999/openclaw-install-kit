@@ -7,6 +7,10 @@ A [Journey kit](https://www.journeykits.ai) for installing, integrating, hardeni
 
 Eight guided phases (including orientation). The agent guides you step by step — you run commands in your terminal, paste the output back, and the agent verifies before moving on. Produces a written runbook at the end.
 
+> **Beta status**
+> This kit is usable today, but it is still a beta release rather than a broadly validated polished public release.
+> The tested path is narrow and explicitly documented below.
+
 ---
 
 ## Why this kit?
@@ -57,6 +61,35 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 - Terminal or SSH access to the target machine
 - An API key from a supported LLM provider (Anthropic recommended)
 - A domain name is optional — Telegram works in long-poll mode without one
+
+---
+
+## Known Supported Path
+
+This is the path I currently recommend as the default first run:
+
+- Ubuntu 24.04 LTS
+- ASUS ZenBook UX305FA class hardware or similar x86_64 Linux machine
+- Claude Code execution mode
+- Cloud LLM provider
+- Telegram integration
+- WhatsApp Path A only if needed: personal number via `whatsapp-web.js`
+
+If you stay close to that path, the kit is much more likely to work end to end without adaptation.
+
+---
+
+## Known Not Yet Validated
+
+- VPS deployments
+- Debian
+- macOS
+- Raspberry Pi / ARM64
+- Journey AI clipboard mode
+- WhatsApp Path B (Meta Business API)
+- Slack, Email, Google, GitHub, and local disk integrations
+
+These paths may still be reasonable, but today they should be treated as unvalidated rather than fully supported.
 
 ---
 
@@ -120,13 +153,13 @@ The natural next step is [`keylimeaistudios/ai-employee-starter`](https://www.jo
 
 ## Status
 
-`v0.1.0` — first working draft.
+`v0.1.0-beta` — first working draft, suitable for early external review.
 
 **Validated on**: Ubuntu 24.04 LTS, ASUS ZenBook UX305FA (Intel Core M, fanless, x86_64). This is the only hardware and OS combination that has been real-world tested to date.
 
 Not yet validated on: Debian, macOS, Raspberry Pi / ARM64, VPS, or any hardware other than the UX305FA. WhatsApp Path B (Meta Business API) has not been tested. See TESTING.md for the full validation status and known gaps.
 
-Not yet published to the Journey registry. Publish planned after broader real-world validation.
+Not yet published to the Journey registry. Recommended next step: one more real-world validation run, ideally on a VPS, before calling it polished/public.
 
 Contributions and test reports welcome — see CONTRIBUTING.md.
 

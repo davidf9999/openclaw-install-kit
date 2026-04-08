@@ -31,6 +31,11 @@ OpenClaw will call a cloud provider (Anthropic, OpenAI, etc.) for every response
 - 8 phases, roughly 30–60 minutes of active work
 - Most of that is you running commands and me guiding and verifying
 
+**Recommended first run:**
+- If you want the smoothest path, start with **Ubuntu 24.04 + Telegram only**
+- Add extra integrations only after the core install is working
+- WhatsApp Path A is the best-tested extension after Telegram
+
 **How we work together:**
 - I will give you command blocks to run in your terminal
 - You run them and paste the output back here

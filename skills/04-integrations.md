@@ -23,6 +23,12 @@ Only set up platforms listed in `deployment-brief.md`. Skip all other sections.
 
 Always start with Telegram (simplest, no SSL required in long-poll mode). Add others only after Telegram is verified working.
 
+For a first beta run, the recommended stopping point is:
+- Telegram only, if the user just wants a successful core install
+- Telegram + WhatsApp Path A, if they specifically need WhatsApp on the first pass
+
+Defer Slack, Email, Google, GitHub, local disk, and WhatsApp Path B unless the user explicitly needs them now and understands they are less validated than the core path.
+
 After every `openclaw config set` block, restart the daemon:
 ```bash
 systemctl --user restart openclaw-gateway

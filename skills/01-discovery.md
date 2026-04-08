@@ -51,6 +51,11 @@ Which platforms should OpenClaw connect to? (select all that apply)
 
 For each selected platform, note whether a bot/app account already exists.
 
+If the user is unsure, recommend this beta-first path:
+- Primary: Telegram
+- Additional: none on the first run, or WhatsApp Path A only if they specifically need it
+- Defer Slack, Email, Google, GitHub, and other integrations to a second pass after the core install is working
+
 ### 4. Integrations
 
 - Google Workspace (Calendar, Gmail, Drive)? (Most complex — only include if needed. Ask which services specifically.)
