@@ -9,7 +9,7 @@ This is for people who want to run OpenClaw on their own machine or VPS and are 
 Good fits include:
 - hobbyists and tinkerers installing OpenClaw for the first time
 - self-hosting users who want a structured, safer path than a one-line install script
-- developers who want a reproducible install and handoff flow
+- technical users who want a reproducible install and handoff flow
 - people who want Telegram first, then add other integrations later
 
 ## Prerequisites
@@ -162,7 +162,7 @@ The following files are produced during install and gitignored — they stay on 
 
 This kit is designed for two execution modes:
 
-**Claude Code (tool-executing)**: The agent runs all terminal commands directly. You review output and approve actions. Fastest path — used during the kit's own development.
+**Claude Code (tool-executing)**: The agent runs all terminal commands directly. You review output and approve actions. Fastest path — used while building and validating this kit.
 
 **Journey AI or any chat interface (clipboard model)**: The agent has no terminal access. Each skill gives you a command block, asks you to run it and paste the output back, and verifies the result before moving on. Every command in the skill files is formatted for this pattern.
 
