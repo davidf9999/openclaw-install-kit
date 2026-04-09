@@ -97,7 +97,6 @@ If you stay close to that path, the kit is much more likely to work end to end w
 
 ## Known Not Yet Validated
 
-- VPS deployments
 - Debian
 - macOS
 - Raspberry Pi / ARM64
