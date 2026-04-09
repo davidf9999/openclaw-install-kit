@@ -16,11 +16,11 @@
 | Debian 11/12 | ❌ Not tested |
 | macOS 12+ | ❌ Not tested — Phase 2 requires Homebrew adaptation not in this kit |
 | Raspberry Pi / ARM64 | ❌ Not tested |
-| VPS (DigitalOcean, Hetzner, etc.) | ❌ Not tested |
+| VPS (DigitalOcean, Hetzner, etc.) | ✅ Validated once — DigitalOcean / Ubuntu 24.04.3 LTS / Frankfurt / Telegram working |
 | Recovery after /compact (context loss) | ❌ Not tested in a real session |
 | Journey AI clipboard mode | ❌ Not tested — kit developed in Claude Code tool-executing mode |
 
-**The kit has been validated on exactly one machine configuration.** Everything else is based on documentation review, structural analysis, or inference from the Ubuntu path.
+**The kit has been validated on two machine configurations.** Everything else is based on documentation review, structural analysis, or inference from the known paths.
 
 ### Real-world test run log — v0.1.0 (2026-04-07)
 
@@ -33,6 +33,23 @@
 - **Hardware notes**: Core M is designed for burst workloads, not sustained 24/7 load. For personal assistant use (low concurrency, intermittent requests) it is comfortable. 8 GB RAM has headroom in gateway mode. If migrating to always-on VPS later, Phases 3–7 are unchanged — only Phase 2 needs VPS-specific firewall rules.
 - **First phase that deviated from skill files**: Phase 3 — `openclaw onboard` behaviour and config file locations differed from initial kit assumptions; skill files were updated after this run
 - **Kit updates made**: Full rewrite of skills/03, 04, 05, 06, 07 based on this run's findings
+
+### Real-world test run log — VPS validation (2026-04-09)
+
+- **Provider**: DigitalOcean
+- **Region**: Frankfurt (`fra1`)
+- **OS**: Ubuntu 24.04.3 LTS
+- **Hardware**: 1 vCPU, 2 GB RAM, 50 GB disk
+- **Interface**: Claude Code (tool-executing mode)
+- **Phases completed**: 0a–4, with core install and Telegram validated
+- **Integrations tested**: Telegram ✅
+- **Dashboard access**: SSH tunnel to `http://localhost:18889/`
+- **First visible deviations**:
+  - `openclaw dashboard` required SSH port forwarding on the VPS
+  - `openclaw gateway url` was not the correct command in this version; the dashboard command printed the tunnel instructions
+  - Security audit warned about `gateway.controlUi.allowInsecureAuth=true`
+  - `model-pricing` bootstrap emitted a timeout warning, but the install remained functional
+- **Outcome**: core hosted path works end to end; Telegram paired and replied successfully
 
 ---
 
