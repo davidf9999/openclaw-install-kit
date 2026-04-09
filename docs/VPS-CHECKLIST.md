@@ -57,6 +57,22 @@ Optional automation files in this repo:
 - `scripts/vps-postflight.sh`
 - `templates/deployment-brief-vps-telegram.md`
 
+## Automation Scope
+
+The helper scripts are intentionally narrow:
+
+- `scripts/vps-preflight.sh` captures baseline machine facts and a copy-paste test header
+- `scripts/vps-postflight.sh` captures service state and log evidence at the end
+- The actual install steps stay visible and manual for the first VPS validation run
+
+Why:
+
+- it keeps the validation path observable
+- it makes VPS-specific failures easier to spot
+- it avoids hiding the exact install behavior behind a bootstrap wrapper
+
+If you later do a second VPS pass, a `vps-bootstrap.sh` may be worth adding. For the first pass, the current split is deliberate.
+
 ## Initial VPS Verification
 
 From your local machine:
