@@ -60,6 +60,41 @@ openclaw auth google
 - Calendar query returns the expected results
 - Token and credential files remain restricted to the local host
 
+## Calendar-only first run on local claw
+
+Use this first if you want the smallest useful Google validation slice.
+
+### Checklist
+
+- [ ] Confirm `deployment-brief.md` lists Calendar as `yes`
+- [ ] Confirm the Google account for Calendar is the intended test account
+- [ ] Confirm no Gmail or Drive scopes were added for this run
+- [ ] Create a dedicated Google Cloud project for the test account
+- [ ] Enable only `Google Calendar API`
+- [ ] Create OAuth Desktop App credentials
+- [ ] Copy `credentials.json` to `~/.openclaw/`
+- [ ] Run `chmod 600 ~/.openclaw/credentials.json`
+- [ ] Run `openclaw auth google`
+- [ ] Confirm `token.json` is created in `~/.openclaw/`
+- [ ] Run one read-only calendar query through Telegram or the dashboard
+- [ ] Confirm the result matches the test account’s calendar
+- [ ] Keep `token.json` and `credentials.json` local and restricted
+- [ ] Revoke the test OAuth grant after validation if the account will not be reused
+
+### Minimal success criteria
+
+- A dedicated test account was used
+- Calendar works
+- No other Google services were enabled
+- The generated OAuth files are locked down and remain on the local machine
+
+### Don’t do in the first run
+
+- Don’t add Gmail yet
+- Don’t add Drive yet
+- Don’t reuse a personal primary Google account if you can avoid it
+- Don’t broaden scopes beyond Calendar just to “see what happens”
+
 ## Test 2: Contacts
 
 Repeat the Calendar flow, but enable only `People API` if the installed build supports Contacts as a separate scope.
@@ -113,4 +148,3 @@ Record each test with:
 - `partial` - service starts but scope or behavior is not yet acceptable
 - `fail` - service does not work or requires unsupported assumptions
 - `pending` - service has no confirmed supported path yet
-
