@@ -1,6 +1,6 @@
 # openclaw-install-kit
 
-A [Journey kit](https://www.journeykits.ai) for installing, integrating, hardening, and handing off a self-hosted [OpenClaw](https://openclaw.ai) instance on Ubuntu — using **cloud LLM APIs (Anthropic, OpenAI, etc.)**.
+A skill chain for installing, integrating, hardening, and handing off a self-hosted [OpenClaw](https://openclaw.ai) instance on Ubuntu — packaged as a [Journey kit](https://www.journeykits.ai) and written for **cloud LLM APIs (Anthropic, OpenAI, etc.)**.
 
 > **No GPU. No local model. No Ollama.**  
 > This kit connects OpenClaw to a cloud LLM provider. If you want to run a local model (Llama, Mistral, Ollama, etc.) instead of a cloud API, this kit is not what you need — see the [OpenClaw local LLM docs](https://docs.openclaw.ai) for that path.
@@ -18,6 +18,7 @@ Eight guided phases (including orientation). The agent guides you step by step �
 > The tested path is narrow and explicitly documented below.
 
 **Current best-fit use case**
+- You are thinking in terms of skills or a skill chain, not just a single install script
 - You want a structured OpenClaw install on Ubuntu 24.04
 - You are using Claude Code or another guided terminal workflow
 - You want Telegram first, with WhatsApp Path A as the next best-tested extension
@@ -149,7 +150,7 @@ Both modes are supported throughout. You do not need to choose — just use whic
 
 ## How this kit relates to the Claude skill-creator
 
-The individual skill files are the kind of content the Claude skill-creator produces. The kit adds a composition layer on top: phase sequencing with explicit gates, a shared artifact chain (`deployment-brief.md` carries all decisions from Phase 1 through Phase 7), recovery and re-entry logic for each phase, and explicit input/output contracts between phases. The skill-creator produces the ingredients; the kit adds the orchestration.
+The individual skill files are the kind of content the Claude skill-creator produces. The kit adds a composition layer on top: phase sequencing with explicit gates, a shared artifact chain (`deployment-brief.md` carries all decisions from Phase 1 through Phase 7), recovery and re-entry logic for each phase, and explicit input/output contracts between phases. Put differently: the skill-creator produces the ingredients; this repo turns them into a skill chain.
 
 ## Kit composition chain
 

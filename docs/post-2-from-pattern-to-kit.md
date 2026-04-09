@@ -1,6 +1,6 @@
-# From Failed Permission System to Open-Source Installation Kit
+# From Failed Permission System to an Open Source Skill Chain
 
-Four months of building a Google Drive permission system taught me the wrong way to solve a problem. But one pattern that emerged from it turned out to be worth keeping: a structured, phase-by-phase approach to installing and configuring software with an AI as your co-pilot.
+Four months of building a Google Drive permission system taught me the wrong way to solve a problem. But one pattern that emerged from it turned out to be worth keeping: a structured, phase-by-phase skill chain for installing and configuring software with an AI as your co-pilot.
 
 That pattern is now an open-source project. It is called `openclaw-install-kit`.
 
@@ -24,11 +24,11 @@ At the end you have a running assistant, a written runbook, and a backup.
 
 ---
 
-### What makes it a "journey kit" rather than a README
+### What makes it a skill chain rather than a README
 
 Most install guides are a list of commands. They assume a clean machine, a specific OS, and that nothing will go wrong.
 
-This kit is different in three ways.
+This skill chain is different in three ways.
 
 **First**, it starts with a discovery interview. Before running a single command, it asks what hardware you have, whether it is fanless, whether you have a domain, which messaging platforms you want, and which integrations matter. It writes those answers to a `deployment-brief.md` that every subsequent phase reads and adapts to. A fanless laptop gets thermal monitoring built in. A machine without a domain skips SSL entirely.
 
