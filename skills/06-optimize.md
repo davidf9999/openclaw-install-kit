@@ -152,6 +152,8 @@ export NVM_DIR="$HOME/.nvm" && source "$NVM_DIR/nvm.sh"
 clawdhub search <use-case-keyword>
 ```
 
+If Google integrations are in scope, prefer service-specific workflows over generic all-in-one bundles. Keep Calendar/Contacts, Gmail, and Drive separate until each service is validated and the user has confirmed the intended account boundary.
+
 Common starter skills by use case:
 
 | Use case | Recommended skills |

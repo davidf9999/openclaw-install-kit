@@ -8,7 +8,7 @@ One validated configuration: Ubuntu 24.04 / ASUS UX305FA. Telegram and WhatsApp 
 
 ## v0.2.0 — Validate remaining skill 04 integrations
 
-The integrations below are documented in skill 04 but have **not been tested**. Instructions are based on OpenClaw documentation and may contain errors similar to the initial incorrect assumptions about pm2, port 3000, and system-level systemd that were discovered during the first real install.
+The integrations below are documented in skill 04 but have **not been tested end to end**. Instructions are based on OpenClaw documentation and may contain errors similar to the initial incorrect assumptions about pm2, port 3000, and system-level systemd that were discovered during the first real install.
 
 | Integration | Status | Notes |
 |---|---|---|
@@ -17,8 +17,10 @@ The integrations below are documented in skill 04 but have **not been tested**. 
 | WhatsApp Path B (Meta Business API) | ❌ Not tested | Instructions based on Meta docs only |
 | Slack | ❌ Not tested | |
 | Email (IMAP/SMTP) | ❌ Not tested | |
-| Google Calendar | ❌ Not tested | OAuth flow may differ from documented |
-| Google Contacts | ❌ Not tested | OAuth flow may differ from documented |
+| Google Calendar | 🔶 Planned next | Validate on a dedicated Google test account first |
+| Google Contacts | 🔶 Planned next | Validate alongside Calendar; keep scope separated from Gmail/Drive if needed |
+| Google Gmail | 🔶 Planned next | Treat as a separate, more sensitive stage after Calendar/Contacts |
+| Google Drive | ⏸ Pending path | Only validate after an official supported path is confirmed |
 | GitHub | ❌ Not tested | |
 | Local disk | ❌ Not tested | Scope and safety controls unverified |
 
@@ -51,4 +53,4 @@ OpenClaw's integration ecosystem includes (among others): Gmail, Google Drive, D
 
 The discovery phase (skill 01) is intentionally open-ended — it asks what the user wants and adapts accordingly. If you want to connect an integration not listed in skill 04, the phase header and `deployment-brief.md` support it. You may need to write or adapt the configuration steps yourself and report back to help expand skill 04.
 
-The current skill 04 reflects integrations that were relevant to the kit's first real install, not a deliberate limitation of scope.
+The current skill 04 reflects integrations that were relevant to the kit's first real install, not a deliberate limitation of scope. Google Calendar/Contacts are the next validation slice; Gmail is separate and more sensitive; Drive remains pending until a supported path is confirmed.

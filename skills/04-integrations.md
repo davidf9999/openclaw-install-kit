@@ -26,13 +26,25 @@ Always start with Telegram (simplest, no SSL required in long-poll mode). Add ot
 For a first beta run, the recommended stopping point is:
 - Telegram only, if the user just wants a successful core install
 - Telegram + WhatsApp Path A, if they specifically need WhatsApp on the first pass
+- Telegram + Google Calendar/Contacts only, if Google is the next integration you are validating and the user wants the safest first Google slice
 
-Defer Slack, Email, Google, GitHub, local disk, and WhatsApp Path B unless the user explicitly needs them now and understands they are less validated than the core path.
+Defer Slack, Email, Google Drive, GitHub, local disk, and WhatsApp Path B unless the user explicitly needs them now and understands they are less validated than the core path.
+If Google is selected, prefer the smallest useful slice first:
+- Calendar and Contacts
+- then Gmail
+- then Drive only after the earlier Google services are working and the user has confirmed the scope
 
 After every `openclaw config set` block, restart the daemon:
 ```bash
 systemctl --user restart openclaw-gateway
 ```
+
+Google security baseline:
+- Use a dedicated Google account or Workspace identity for testing when possible.
+- Prefer separate accounts for separate services if the user already split their real-world data that way.
+- Enable only the APIs that are actually selected in `deployment-brief.md`.
+- Do not reuse personal primary accounts if the user can avoid it.
+- Keep OAuth credentials and tokens under `~/.openclaw/` and lock them down immediately with `chmod 600`.
 
 ---
 
@@ -214,6 +226,8 @@ systemctl --user restart openclaw-gateway
 
 **Only proceed if listed in `deployment-brief.md`. Enable only the specific APIs selected.**
 
+**Security note**: if Calendar and Contacts should live on a different Google account than Gmail or Drive, keep them separated here. Avoid broadening a single account beyond the selected services.
+
 1. Go to console.cloud.google.com → Create a new project
 2. Enable APIs: **Google Calendar API**, **People API** (for Contacts) — only these unless brief says otherwise
 3. Create **OAuth 2.0 credentials** → Application type: Desktop app
@@ -236,6 +250,25 @@ Test via the dashboard or Telegram:
 > "What's on my calendar today?"
 
 **Common failure**: If calendar access fails, return to GCP console, verify the APIs are enabled, delete `~/.openclaw/token.json`, and re-run `openclaw auth google`.
+
+### Gmail (if selected)
+
+> ⚠️ **Not yet validated in this kit.** Gmail access is more sensitive than Calendar/Contacts because it can expose message content and inbox metadata.
+
+Use a dedicated test account or a mail-specific Workspace account when possible. Enable only the minimum Gmail scope that the feature actually requires, and do not broaden it to full mailbox access unless the user explicitly wants that.
+
+If OpenClaw supports a Gmail webhook / Pub/Sub flow in the installed version, document the exact official setup and keep the config under `~/.openclaw/`. If the flow is not present in the installed CLI, stop and report that the current version does not expose a supported Gmail path.
+
+### Google Drive (pending / not yet validated)
+
+> ⚠️ **Drive is not yet validated in this kit.** Do not claim this path is ready until you have a successful end-to-end test and a confirmed scope.
+
+If the user selected Drive in discovery, confirm whether they want:
+- read-only file browsing
+- upload / create files
+- folder-scoped access only
+
+Until a supported OpenClaw Drive flow is confirmed, stop after documenting the requirement and add the service to `deployment-brief.md` as pending.
 
 ---
 
@@ -287,6 +320,8 @@ For each platform in `deployment-brief.md`, confirm:
 - [ ] Email: OpenClaw can read and send a test message
 - [ ] Google Calendar: calendar query returns results
 - [ ] Google Contacts: contact lookup works
+- [ ] Google Gmail: mailbox query / trigger works if selected
+- [ ] Google Drive: confirmed supported path exists and file access works if selected
 - [ ] GitHub: PR/repo query returns expected results
 - [ ] Local disk: file listing works, scoped to `~`
 

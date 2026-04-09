@@ -102,7 +102,7 @@ fileManifest:
     description: Core OpenClaw install and gateway configuration
   - path: skills/04-integrations.md
     role: skill
-    description: Messaging, calendar, email, and CRM integration
+    description: Messaging, Google Calendar/Contacts, Gmail, email, and CRM integration
   - path: skills/05-security.md
     role: skill
     description: Security hardening — firewall, credentials, access control
@@ -118,7 +118,7 @@ failures:
   - problem: Thermal throttling on fanless hardware
     resolution: Monitor with `sensors`; throttle concurrent agent tasks if temps exceed 80°C
   - problem: Google OAuth flow fails
-    resolution: Enable all required scopes in GCP console; re-run OAuth flow after scope update
+    resolution: Enable only the selected APIs/scopes in the GCP console, use a dedicated test account when possible, delete the matching token file, and re-run OAuth after scope changes
   - problem: Telegram not receiving messages (webhook mode)
     resolution: Verify SSL certificate is valid and publicly accessible; use `curl` to test webhook endpoint
   - problem: Telegram not receiving messages (long-poll mode, no domain)
@@ -159,7 +159,7 @@ Documented but not yet validated:
 - Raspberry Pi / ARM64
 - Journey AI clipboard mode
 - WhatsApp Path B
-- Slack, Email, Google, GitHub, and local disk integrations
+- Slack, Email, Google (Drive especially), GitHub, and local disk integrations
 
 **Expert fast path**: If you already have a completed `deployment-brief.md` (from a prior install or written manually), skip Phase 1 and go straight to Phase 2.
 
@@ -230,7 +230,7 @@ Phase 0a of this kit covers a lightweight computing selection for users who have
 
 - Requires Node.js 22.14+ (Node 24 recommended). Do not proceed with older versions.
 - Gateway mode only — this kit does not cover local LLM setup.
-- Google Workspace integration is the most complex step and is optional. Only include it if the user confirmed it in discovery.
+- Google Workspace integration is staged: Calendar/Contacts first, Gmail next, Drive only after a supported path is confirmed. Only include the services the user explicitly confirmed in discovery.
 - OpenClaw stores config (including API keys and bot tokens) in `~/.openclaw/openclaw.json`. This file must have permissions `600` and must never be committed to version control. The install kit sets this automatically; verify in Phase 5.
 - On fanless/low-power hardware (Intel Core M, fanless NUCs): monitor CPU temperature throughout. Install `lm-sensors` during infra phase.
 

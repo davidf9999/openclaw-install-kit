@@ -64,6 +64,14 @@ If the user is unsure, recommend this beta-first path:
 - Local disk access? (Scope to home directory only — confirm boundary)
 - Any other webhooks or custom integrations?
 
+If Google is selected, ask for each service separately:
+- Calendar
+- Contacts
+- Gmail
+- Drive
+
+For each selected service, ask which Google account should own it. If the user wants different services on different accounts, record that explicitly. Prefer separate, least-privilege accounts over one broad account when practical.
+
 ### 5. Use cases
 
 In a few sentences: what do you want OpenClaw to do for you day-to-day?
@@ -103,7 +111,12 @@ Generated: <date>
 - WhatsApp path: <personal number — Path A | business number — Path B | none>
 
 ## Integrations
-- Google Workspace: <yes/no — which services>
+- Google Workspace:
+  - Calendar: <yes/no — account>
+  - Contacts: <yes/no — account>
+  - Gmail: <yes/no — account>
+  - Drive: <yes/no — account>
+  - Account split: <same account | separate accounts | TBD>
 - GitHub: <yes/no>
 - Local disk: <yes/no — scope>
 - CRM: <name or none>

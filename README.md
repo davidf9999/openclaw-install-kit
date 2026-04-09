@@ -57,7 +57,7 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 | 1 | `skills/01-discovery.md` | Interview → `deployment-brief.md` |
 | 2 | `skills/02-infra.md` | Node 24, ufw firewall, SSL, thermal monitoring |
 | 3 | `skills/03-openclaw-core.md` | Install + systemd daemon + health check |
-| 4 | `skills/04-integrations.md` | Telegram, WhatsApp, Slack, Email, Google, GitHub, local disk |
+| 4 | `skills/04-integrations.md` | Telegram, WhatsApp, Slack, Email, Google Calendar/Contacts, Gmail, Drive, GitHub, local disk |
 | 5 | `skills/05-security.md` | Firewall audit, credential hygiene, fail2ban, SSH |
 | 6 | `skills/06-optimize.md` | System prompt, skill selection, workflow scheduling |
 | 7 | `skills/07-handoff.md` | `runbook.md` generation, backup, final checklist |
@@ -76,6 +76,7 @@ Most existing OpenClaw setup tools are cloud-only (VPS provisioning scripts). Th
 - Terminal or SSH access to the target machine
 - An API key from a supported LLM provider (Anthropic recommended)
 - A domain name is optional — Telegram works in long-poll mode without one
+- Google is staged: Calendar/Contacts first, Gmail next, Drive only after a supported path is confirmed
 
 ---
 
@@ -174,7 +175,7 @@ The natural next step is [`keylimeaistudios/ai-employee-starter`](https://www.jo
 - Ubuntu 24.04 LTS, ASUS ZenBook UX305FA (Intel Core M, fanless, x86_64)
 - DigitalOcean VPS, Ubuntu 24.04.3 LTS, Frankfurt, 1 vCPU / 2 GB RAM, Telegram working
 
-Not yet validated on: Debian, macOS, Raspberry Pi / ARM64, WhatsApp Path B (Meta Business API), Slack, Email, Google, GitHub, local disk, or Journey AI clipboard mode. See TESTING.md for the full validation status and known gaps.
+Not yet validated on: Debian, macOS, Raspberry Pi / ARM64, WhatsApp Path B (Meta Business API), Slack, Email, Google Calendar/Contacts, Google Gmail, Google Drive, GitHub, local disk, or Journey AI clipboard mode. See TESTING.md for the full validation status and known gaps.
 
 Not yet published to the Journey registry. Recommended next step: one more integration-focused validation run, or a second VPS pass with one extra integration, before calling it polished/public.
 

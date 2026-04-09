@@ -10,7 +10,10 @@
 | Cloudflare named tunnel | ✅ Verified working |
 | WhatsApp Path B (Meta Business API) | ❌ Not tested — instructions based on Meta documentation only |
 | Slack, Email, Discord, Signal | ❌ Not tested |
-| Google Calendar / Contacts | ❌ Not tested |
+| Google Calendar | 🔶 Planned next — dedicated test account, least-privilege scopes |
+| Google Contacts | 🔶 Planned next — validate with Calendar first |
+| Google Gmail | 🔶 Planned next — separate stage, more sensitive scopes |
+| Google Drive | ⏸ Pending path — do not treat as validated until a supported flow exists |
 | GitHub integration | ❌ Not tested |
 | Local disk integration | ❌ Not tested |
 | Debian 11/12 | ❌ Not tested |
@@ -21,6 +24,19 @@
 | Journey AI clipboard mode | ❌ Not tested — kit developed in Claude Code tool-executing mode |
 
 **The kit has been validated on two machine configurations.** Everything else is based on documentation review, structural analysis, or inference from the known paths.
+
+### Google validation policy
+
+Google integrations are intentionally staged:
+- Calendar and Contacts come first
+- Gmail is a separate, more sensitive follow-up stage
+- Drive stays pending until there is a supported path and a successful end-to-end test
+
+Security baseline for all Google tests:
+- use a dedicated Google test account or Workspace identity when possible
+- enable only the APIs/scopes actually selected in `deployment-brief.md`
+- keep OAuth files under `~/.openclaw/`
+- delete only the token file for the service you are retesting, not the whole workspace unless necessary
 
 ### Real-world test run log — v0.1.0 (2026-04-07)
 
