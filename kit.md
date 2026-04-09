@@ -153,7 +153,6 @@ Known supported path:
 - WhatsApp Path A (personal number via `whatsapp-web.js`) when needed
 
 Documented but not yet validated:
-- VPS deployments
 - Debian
 - macOS
 - Raspberry Pi / ARM64
