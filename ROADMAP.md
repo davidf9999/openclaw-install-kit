@@ -25,6 +25,7 @@ The integrations below are documented in skill 04 but have **not been tested end
 | Local disk | ❌ Not tested | Scope and safety controls unverified |
 
 **The kit welcomes test reports** — see [CONTRIBUTING.md](CONTRIBUTING.md) and [TESTING.md](TESTING.md).
+For the staged Google validation sequence, see [docs/GOOGLE-TEST-PLAN.md](docs/GOOGLE-TEST-PLAN.md).
 
 ---
 

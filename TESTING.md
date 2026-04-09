@@ -32,6 +32,8 @@ Google integrations are intentionally staged:
 - Gmail is a separate, more sensitive follow-up stage
 - Drive stays pending until there is a supported path and a successful end-to-end test
 
+For the step-by-step test sequence, see [docs/GOOGLE-TEST-PLAN.md](docs/GOOGLE-TEST-PLAN.md).
+
 Security baseline for all Google tests:
 - use a dedicated Google test account or Workspace identity when possible
 - enable only the APIs/scopes actually selected in `deployment-brief.md`
