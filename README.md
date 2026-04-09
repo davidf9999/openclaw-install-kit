@@ -2,6 +2,27 @@
 
 A skill chain for installing, integrating, hardening, and handing off a self-hosted [OpenClaw](https://openclaw.ai) instance on Ubuntu — packaged as a [Journey kit](https://www.journeykits.ai) and written for **cloud LLM APIs (Anthropic, OpenAI, etc.)**.
 
+## Who This Is For
+
+This is for people who want to run OpenClaw on their own machine or VPS and are willing to follow a guided terminal workflow. You do not need to be a developer, but you should be comfortable copying commands into a terminal, reading output, and making a few account/setup decisions along the way.
+
+Good fits include:
+- hobbyists and tinkerers installing OpenClaw for the first time
+- self-hosting users who want a structured, safer path than a one-line install script
+- developers who want a reproducible install and handoff flow
+- people who want Telegram first, then add other integrations later
+
+## Prerequisites
+
+- A machine running Ubuntu 24.04 is the best-supported path today
+- Terminal access on that machine, or SSH access to a VPS
+- Node 24 or the ability to install it during setup
+- An Anthropic, OpenAI, or other supported cloud LLM API key
+- Telegram if you want the simplest first integration
+- Optional: a domain name, if you plan to expose webhooks or use integrations that require public HTTPS
+
+If you are not sure whether your setup fits, start with the discovery phase. It will help you decide what machine to use and which integrations to include.
+
 > **No GPU. No local model. No Ollama.**  
 > This kit connects OpenClaw to a cloud LLM provider. If you want to run a local model (Llama, Mistral, Ollama, etc.) instead of a cloud API, this kit is not what you need — see the [OpenClaw local LLM docs](https://docs.openclaw.ai) for that path.
 
