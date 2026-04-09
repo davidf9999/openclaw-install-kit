@@ -64,6 +64,8 @@ openclaw auth google
 
 Use this first if you want the smallest useful Google validation slice.
 
+For a short tester-facing version, see [docs/CALENDAR-FIRST-RUN.md](docs/CALENDAR-FIRST-RUN.md).
+
 ### Checklist
 
 - [ ] Confirm `deployment-brief.md` lists Calendar as `yes`
