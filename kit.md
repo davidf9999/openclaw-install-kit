@@ -14,6 +14,14 @@ tags:
   - AI-assistant
   - infrastructure
   - security
+tech:
+  - ubuntu
+  - nodejs
+  - systemd
+  - telegram
+  - whatsapp
+  - anthropic
+  - cloudflare
 model:
   provider: anthropic
   name: claude-sonnet-4-6
