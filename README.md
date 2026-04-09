@@ -169,13 +169,17 @@ The natural next step is [`keylimeaistudios/ai-employee-starter`](https://www.jo
 
 `v0.1.0-beta` — first working draft, suitable for early external review.
 
-**Validated on**: Ubuntu 24.04 LTS, ASUS ZenBook UX305FA (Intel Core M, fanless, x86_64). This is the only hardware and OS combination that has been real-world tested to date.
+**Validated on**:
+- Ubuntu 24.04 LTS, ASUS ZenBook UX305FA (Intel Core M, fanless, x86_64)
+- DigitalOcean VPS, Ubuntu 24.04.3 LTS, Frankfurt, 1 vCPU / 2 GB RAM, Telegram working
 
-Not yet validated on: Debian, macOS, Raspberry Pi / ARM64, VPS, or any hardware other than the UX305FA. WhatsApp Path B (Meta Business API) has not been tested. See TESTING.md for the full validation status and known gaps.
+Not yet validated on: Debian, macOS, Raspberry Pi / ARM64, WhatsApp Path B (Meta Business API), Slack, Email, Google, GitHub, local disk, or Journey AI clipboard mode. See TESTING.md for the full validation status and known gaps.
 
-Not yet published to the Journey registry. Recommended next step: one more real-world validation run, ideally on a VPS, before calling it polished/public.
+Not yet published to the Journey registry. Recommended next step: one more integration-focused validation run, or a second VPS pass with one extra integration, before calling it polished/public.
 
 Contributions and test reports welcome — see CONTRIBUTING.md.
+
+For the VPS validation workflow, see [docs/VPS-CHECKLIST.md](docs/VPS-CHECKLIST.md). It points to the helper scripts in `scripts/` and the VPS-specific deployment brief template in `templates/`.
 
 ---
 
