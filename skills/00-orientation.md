@@ -44,7 +44,7 @@ OpenClaw will call a cloud provider (Anthropic, OpenAI, etc.) for every response
 - I will give you command blocks to run in your terminal
 - You run them and paste the output back here
 - I read the output, confirm everything looks right, and give you the next step
-- If you are using **Claude Code**: I can run commands directly on your machine — you will see each one and can approve or deny it
+- If you are using a **tool-executing agent CLI** such as Claude Code or Codex CLI: I can run commands directly on your machine — you will see each one and can approve or deny it
 - If you are using **Journey AI or a plain chat interface**: you run all commands yourself and paste the output back — I have no direct access to your terminal
 
 **Before we start, make sure you have:**

@@ -41,7 +41,7 @@ Eight guided phases (including orientation). The agent guides you step by step �
 **Current best-fit use case**
 - You are thinking in terms of skills or a skill chain, not just a single install script
 - You want a structured OpenClaw install on Ubuntu 24.04
-- You are using Claude Code or another guided terminal workflow
+- You are using an AI coding agent CLI such as Claude Code, Codex CLI, or another guided terminal workflow
 - You want Telegram first, with WhatsApp Path A as the next best-tested extension
 - You care about durability, security hardening, and a real runbook at the end
 
@@ -106,7 +106,7 @@ This is the path I currently recommend as the default first run:
 
 - Ubuntu 24.04 LTS
 - ASUS ZenBook UX305FA class hardware or similar x86_64 Linux machine
-- Claude Code execution mode
+- Tool-executing agent CLI mode, tested with Claude Code and Codex CLI
 - Cloud LLM provider
 - Telegram integration
 - WhatsApp Path A only if needed: personal number via `whatsapp-web.js`
@@ -130,20 +130,34 @@ These paths may still be reasonable, but today they should be treated as unvalid
 
 ## Quick start
 
-### Install via Journey
+Use the direct clone path for now. The Journey registry install path should be documented only after this kit is published to Journey and the install flow is tested.
 
-```bash
-# From Claude Code
-journey install dfront/openclaw-install
-```
-
-### Or clone and use directly
+### Clone and use directly
 
 ```bash
 git clone https://github.com/davidf9999/openclaw-install-kit
 cd openclaw-install-kit
-# Open kit.md and follow the phases in order
 ```
+
+Start your agent in this directory. For example:
+
+```bash
+claude
+# or
+codex
+```
+
+Then prompt the agent:
+
+```text
+Use kit.md in this repository to guide me through installing OpenClaw.
+```
+
+The kit will ask where to install OpenClaw, gather missing deployment details, manage resume state, and work through the phases in order.
+
+### Journey status
+
+[Journey](https://www.journeykits.ai) is a registry for reusable agent workflows called kits. This repo follows the Journey kit structure, but it is not yet published to the Journey registry. Do not use `journey install dfront/openclaw-install` until the kit is published and that install path has been tested.
 
 ---
 
@@ -152,6 +166,7 @@ cd openclaw-install-kit
 The following files are produced during install and gitignored — they stay on your server:
 
 - `deployment-brief.md` — your infrastructure and integration decisions
+- `install-state.md` — current phase, completed outputs, blockers, and next step
 - `runbook.md` — restart, update, backup, and troubleshooting reference
 - `system-prompt.md` — your OpenClaw assistant's persona and instructions
 - `workflows.md` — scheduled tasks configuration
@@ -162,15 +177,15 @@ The following files are produced during install and gitignored — they stay on 
 
 This kit is designed for two execution modes:
 
-**Claude Code (tool-executing)**: The agent runs all terminal commands directly. You review output and approve actions. Fastest path — used while building and validating this kit.
+**Tool-executing agent CLI**: Agents such as Claude Code or Codex CLI run terminal commands directly. You review output and approve actions. This is the fastest path and has been used while building and validating this kit.
 
 **Journey AI or any chat interface (clipboard model)**: The agent has no terminal access. Each skill gives you a command block, asks you to run it and paste the output back, and verifies the result before moving on. Every command in the skill files is formatted for this pattern.
 
 Both modes are supported throughout. You do not need to choose — just use whichever interface you have.
 
-## How this kit relates to the Claude skill-creator
+## How this kit relates to skill files
 
-The individual skill files are the kind of content the Claude skill-creator produces. The kit adds a composition layer on top: phase sequencing with explicit gates, a shared artifact chain (`deployment-brief.md` carries all decisions from Phase 1 through Phase 7), recovery and re-entry logic for each phase, and explicit input/output contracts between phases. Put differently: the skill-creator produces the ingredients; this repo turns them into a skill chain.
+The individual skill files are self-contained instructions for specific tasks. The kit adds a composition layer on top: phase sequencing with explicit gates, a shared artifact chain (`deployment-brief.md` carries all decisions from Phase 1 through Phase 7), recovery and re-entry logic for each phase, and explicit input/output contracts between phases. Put differently: the skill files are the ingredients; this repo turns them into a skill chain.
 
 ## Kit composition chain
 

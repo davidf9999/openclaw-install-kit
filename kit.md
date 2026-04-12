@@ -67,16 +67,18 @@ environment:
   os: linux-macos
   platforms:
     - claude-code
+    - codex
     - journey-ai
   adaptationNotes: >
     Dual-runtime design: works in two distinct execution modes.
-    (1) Claude Code (tool-executing): the agent runs commands directly, reads output, and
-    proceeds without user involvement in terminal steps.
+    (1) Tool-executing agent CLI, such as Claude Code or Codex CLI: the agent runs
+    commands directly, reads output, and proceeds without user involvement in terminal steps.
     (2) Journey AI / plain chat (clipboard model): the agent gives command blocks, the user
     runs them manually in their terminal, pastes output back, and the agent verifies before
     continuing. Every command block in the skill files is formatted for this paste-and-verify
-    pattern — it is harmless in Claude Code and essential in Journey AI.
-    Validated so far on Ubuntu 24.04.4 LTS on ASUS ZenBook UX305FA hardware in Claude Code.
+    pattern — it is harmless in tool-executing agent CLIs and essential in Journey AI.
+    Validated so far on Ubuntu 24.04.4 LTS on ASUS ZenBook UX305FA hardware with
+    Claude Code and Codex CLI.
     Debian 11/12, macOS 12+, Raspberry Pi OS 64-bit (ARM64), VPS deployments, and Journey AI
     clipboard mode are documented but not yet validated end to end.
     Fanless/low-power hardware (e.g. Intel Core M) is supported with thermal monitoring notes.
@@ -134,7 +136,7 @@ Install, configure, integrate, harden, and hand off a self-hosted OpenClaw insta
 - You want to self-host OpenClaw on a Linux machine and are comfortable starting from the tested Ubuntu path
 - You are using cloud LLM APIs (Anthropic, OpenAI, etc.) — no local GPU required
 - You want a structured, phase-by-phase installation that produces documentation as it goes
-- You are running this kit from Claude Code (before OpenClaw is installed)
+- You are running this kit from an AI coding agent CLI before OpenClaw is installed
 
 Not suitable for:
 - Local LLM / Ollama setups (different resource requirements — see openclaw docs)
@@ -148,7 +150,7 @@ This kit should currently be presented as a beta.
 Known supported path:
 - Ubuntu 24.04.4 LTS
 - x86_64 laptop or desktop hardware
-- Claude Code execution mode
+- Tool-executing agent CLI mode, tested with Claude Code and Codex CLI
 - Telegram integration
 - WhatsApp Path A (personal number via `whatsapp-web.js`) when needed
 
@@ -174,34 +176,48 @@ Documented but not yet validated:
 - SSH access or local terminal on the target machine (confirmed before Phase 1 begins)
 - An Anthropic API key (or other supported provider key)
 - A domain name or DDNS hostname (required for webhook-based integrations; optional for Telegram long-poll mode)
-- This kit is run from Claude Code on your machine, or can be followed manually via any chat interface (see Dual-runtime design below)
+- This kit is run from an AI coding agent CLI on your machine, or can be followed manually via any chat interface (see Dual-runtime design below)
 
 ### Dual-runtime design
 
 This kit is designed to work in two distinct execution modes:
 
-**Claude Code (tool-executing mode)**: The agent runs all terminal commands directly. The user reviews output and approves actions. This is the fastest path and was used during the kit's initial development.
+**Tool-executing agent CLI mode**: Agents such as Claude Code or Codex CLI run terminal commands directly. The user reviews output and approves actions. This is the fastest path and was used during the kit's initial development.
 
 **Journey AI / plain chat (clipboard model)**: The agent has no terminal access. Each skill gives command blocks with explicit "run this and paste the output" instructions. The user runs the command, pastes the output into the chat, and the agent verifies before proceeding. This mode is safe to use with any chat-based AI interface.
 
 Every command block in the skill files is formatted to work in both modes. The paste-and-verify pattern is essential in clipboard mode and harmless in tool-executing mode.
 
-### Relationship to the Claude skill-creator
+### Relationship to skill files
 
-The individual skill files (`skills/NN-name.md`) are the kind of content the Claude skill-creator produces — self-contained instructions for a specific task. The kit adds a composition layer on top of that content:
+The individual skill files (`skills/NN-name.md`) are self-contained instructions for specific tasks. The kit adds a composition layer on top of that content:
 
 - **Phase sequencing with explicit gates**: phases cannot be skipped; each completion check must pass before the next phase begins
 - **Shared artifact chain**: `deployment-brief.md` is produced in Phase 1 and consumed by every subsequent phase; each phase adapts its steps based on the flags it contains (fanless hardware, domain availability, WhatsApp path, etc.)
 - **Recovery / re-entry logic**: every skill can be re-entered after a session break or context loss; `deployment-brief.md` on disk is the persistent state
 - **Input/output contracts**: each skill declares what it requires and what it produces
 
-The skill-creator produces content; the kit adds orchestration.
+The skill files provide task instructions; the kit adds orchestration.
 
 ### Running the kit
+
+Read this file first, then determine whether this is a fresh install or a resume:
+
+- If `install-state.md` exists, read it and continue from the next incomplete phase.
+- If `install-state.md` does not exist, inspect generated artifacts such as `deployment-brief.md` and `runbook.md`, then choose the earliest phase whose output is missing or unverified.
+- If no state or artifacts exist, start with Phase 0a.
 
 Work through each skill file in order (Phase 0a → Phase 7). Each skill produces an artifact (a file or a verified state) that the next skill consumes. Do not skip phases — each one sets up prerequisites for the next.
 
 At the end of each phase, confirm the output artifact exists before moving on.
+
+Maintain `install-state.md` as you go. After each phase, update it with:
+
+- completed phase number and skill file
+- output artifact or verified state
+- target type (`local machine` or `VPS over SSH`)
+- open questions or blockers
+- next phase to run
 
 ### Kit composition chain
 

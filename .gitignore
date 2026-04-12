@@ -10,12 +10,20 @@ token.json
 *.pem
 *.key
 
+# Personal deployment artifacts
+deployment-brief.md
+install-state.md
+runbook.md
+workflows.md
+system-prompt.md
+
 # OS
 .DS_Store
 Thumbs.db
 packages.microsoft.gpg
 
 # Editor
+.codex
 .vscode/
 .idea/
 *.swp
